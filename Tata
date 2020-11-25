@@ -318,9 +318,9 @@ chmod +x screenfetch
 
 # Download Commands
 cd /usr/bin
-wget https://github.com/nokyaselpon/MyScript/raw/main/Menu_Script.tar.gz
-tar -xzvf AutoScript_Menu.tar.gz
-rm AutoScript_Menu.tar.gz
+wget https://github.com/nokyaselpon/MyScript/raw/main/MenuScript.tar.gz
+tar -xzvf MenuScript.tar.gz
+rm MenuScript.tar.gz
 sed -i -e 's/\r$//' accounts
 sed -i -e 's/\r$//' bench-network
 sed -i -e 's/\r$//' clearcache
