@@ -6,6 +6,8 @@ OS=`uname -m`;
 MYIP=`ifconfig eth0 | awk 'NR==2 {print $2}'`
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 
+# Install zip
+apt-get install unzip
 
 # Root Directory
 cd
@@ -318,9 +320,8 @@ chmod +x screenfetch
 
 # Download Commands
 cd /usr/bin
-wget https://github.com/nokyaselpon/MyScript/raw/main/MenuScript.gz
-tar -xzvf MenuScript.gz
-rm MenuScript.gz
+wget https://github.com/nokyaselpon/MyScript/raw/main/MenuScript.zip
+unzip MenuScript.gz
 sed -i -e 's/\r$//' accounts
 sed -i -e 's/\r$//' bench-network
 sed -i -e 's/\r$//' clearcache
