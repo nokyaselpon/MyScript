@@ -269,9 +269,7 @@ service dropbear restart
 # Install Squid3
 cd
 apt-get -y install squid3
-cat > /etc/squid3/squid.conf <<-END
 wget -O /etc/squid3/squid.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/squid3.conf"
-END
 sed -i $MYIP2 /etc/squid3/squid.conf;
 service squid3 restart
 
