@@ -318,7 +318,7 @@ chmod +x screenfetch
 
 # Download Commands
 cd /usr/bin
-wget https://github.com/nokyaselpon/MyScript/raw/main/AutoScript_Menu.tar.gz
+wget https://github.com/nokyaselpon/MyScript/raw/main/Menu_Script.tar.gz
 tar -xzvf AutoScript_Menu.tar.gz
 rm AutoScript_Menu.tar.gz
 sed -i -e 's/\r$//' accounts
