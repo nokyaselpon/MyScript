@@ -269,7 +269,9 @@ service dropbear restart
 # Install Squid3
 cd
 apt-get -y install squid3
+cat > /etc/squid3/squid.conf <<-END
 wget -O /etc/squid3/squid.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/squid3.conf"
+END
 sed -i $MYIP2 /etc/squid3/squid.conf;
 service squid3 restart
 
@@ -321,7 +323,8 @@ chmod +x screenfetch
 # Download Commands
 cd /usr/bin
 wget https://github.com/nokyaselpon/MyScript/raw/main/MenuScript.zip
-unzip MenuScript.gz
+unzip MenuScript.zip
+chmod +x /usr/bin/*
 sed -i -e 's/\r$//' accounts
 sed -i -e 's/\r$//' bench-network
 sed -i -e 's/\r$//' clearcache
