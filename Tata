@@ -1,5 +1,5 @@
 #!/bin/bash
-# Nath Auto Script
+# Nath Auto Script v1
 # Initializing Var
 export DEBIAN_FRONTEND=noninteractive
 OS=`uname -m`;
