@@ -255,7 +255,7 @@ screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
 
 # SSH Configuration
 cd
-sed -i '/Port 22/a Port 143' /etc/ssh/sshd_config
+sed -i '/Port 22/a Port 443' /etc/ssh/sshd_config
 sed -i '/Port 22/a Port  81' /etc/ssh/sshd_config
 sed -i 's/Port 22/Port  22/g' /etc/ssh/sshd_config
 service ssh restart
@@ -264,7 +264,7 @@ service ssh restart
 apt-get -y install dropbear
 sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
 sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=442/g' /etc/default/dropbear
-sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 82 -p 142"/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 777 -p 666"/g' /etc/default/dropbear
 echo "/bin/false" >> /etc/shells
 echo "/usr/sbin/nologin" >> /etc/shells
 service ssh restart
@@ -273,7 +273,7 @@ service dropbear restart
 # Install Squid3
 cd
 apt-get -y install squid3
-wget -O /etc/squid3/squid.conf "https://raw.githubusercontent.com/jvb20/AutoScriptVPS/master/Files/Squid/squid3.conf"
+wget -O /etc/squid3/squid.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/squid3.conf"
 sed -i $MYIP2 /etc/squid3/squid.conf;
 service squid3 restart
 
@@ -285,8 +285,8 @@ service webmin restart
 
 # Install Stunnel
 apt-get -y install stunnel4
-wget -O /etc/stunnel/stunnel.pem "https://raw.githubusercontent.com/jvb20/AutoScriptVPS/master/Files/Stunnel/stunnel.pem"
-wget -O /etc/stunnel/stunnel.conf "https://raw.githubusercontent.com/jvb20/AutoScriptVPS/master/Files/Stunnel/stunnel.conf"
+wget -O /etc/stunnel/stunnel.pem "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/stunnel.pem"
+wget -O /etc/stunnel/stunnel.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/stunnel.conf"
 sed -i $MYIP2 /etc/stunnel/stunnel.conf
 sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
 service stunnel4 restart
@@ -298,7 +298,7 @@ service fail2ban restart
 # Install DDOS Deflate
 cd
 apt-get -y install dnsutils dsniff
-wget "https://github.com/jvb20/AutoScriptVPS/raw/master/Files/Others/ddos-deflate-master.zip"
+wget "https://github.com/nokyaselpon/MyScript/raw/main/ddos-deflate-master.zip"
 unzip ddos-deflate-master.zip
 cd ddos-deflate-master
 ./install.sh
@@ -307,7 +307,7 @@ rm -rf ddos-deflate-master.zip
 
 # Banner
 rm /etc/issue.net
-wget -O /etc/issue.net "https://raw.githubusercontent.com/jvb20/AutoScriptVPS/master/Files/Others/issue.net"
+wget -O /etc/issue.net "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/issue.net"
 sed -i 's@#Banner@Banner@g' /etc/ssh/sshd_config
 sed -i 's@DROPBEAR_BANNER=""@DROPBEAR_BANNER="/etc/issue.net"@g' /etc/default/dropbear
 service ssh restart
@@ -319,12 +319,12 @@ apt-get -y --force-yes -f install libxml-parser-perl
 
 # Install Screenfetch
 apt-get -y install lsb-release scrot
-wget -O screenfetch "https://raw.githubusercontent.com/jvb20/AutoScriptVPS/master/Files/Others/screenfetch"
+wget -O screenfetch "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/screenfetch"
 chmod +x screenfetch
 
 # Download Commands
 cd /usr/bin
-wget https://github.com/jvb20/AutoScriptVPS/raw/master/Files/Menu/AutoScript_Menu.tar.gz
+wget https://github.com/nokyaselpon/MyScript/raw/main/AutoScript_Menu.tar.gz
 tar -xzvf AutoScript_Menu.tar.gz
 rm AutoScript_Menu.tar.gz
 sed -i -e 's/\r$//' accounts
@@ -431,14 +431,14 @@ clear
 echo -e ""
 echo -e "\e[94m[][][]======================================[][][]"
 echo -e "\e[0m                                                   "
-echo -e "\e[94m           AutoScriptVPS by  Hiratechi           "
+echo -e "\e[94m           Nath Debian Auto Script          "
 echo -e "\e[94m                                                  "
 echo -e "\e[94m                    Services                      "
 echo -e "\e[94m                                                  "
 echo -e "\e[94m    OpenSSH        :   "$opensshport
 echo -e "\e[94m    Dropbear       :   "$dropbearport
 echo -e "\e[94m    SSL            :   "$stunnel4port
-echo -e "\e[94m    OpenVPN        :   "1194 [do not change]
+echo -e "\e[94m    OpenVPN        :   "210 [do not change]
 echo -e "\e[94m    Port Squid     :   "$squidport
 echo -e "\e[94m    Nginx          :   "$nginxport
 echo -e "\e[94m                                                  "
