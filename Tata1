@@ -26,6 +26,7 @@ apt-get update;apt-get -y install wget curl;
 
 # Local Time Manila
 ln -fs /usr/share/zoneinfo/Asia/Manila /etc/localtime
+
 # Local Configuration
 sed -i 's/AcceptEnv/#AcceptEnv/g' /etc/ssh/sshd_config
 service ssh restart
@@ -121,6 +122,7 @@ service openvpn start
 apt-get install ufw
 ufw allow ssh
 ufw allow 210/tcp
+ufw allow 22/tcp
 sed -i 's|DEFAULT_INPUT_POLICY="DROP"|DEFAULT_INPUT_POLICY="ACCEPT"|' /etc/default/ufw
 sed -i 's|DEFAULT_FORWARD_POLICY="DROP"|DEFAULT_FORWARD_POLICY="ACCEPT"|' /etc/default/ufw
 cd /etc/ufw/
@@ -248,6 +250,13 @@ iptables -D FORWARD -m string --algo bm --string "info_hash" -j DROP
 iptables -D FORWARD -m string --algo bm --string "tracker" -j DROP
 iptables-save
 cd
+
+# SSH Configuration
+cd
+sed -i '/Port 22/a Port 143' /etc/ssh/sshd_config
+sed -i '/Port 22/a Port  81' /etc/ssh/sshd_config
+sed -i 's/Port 22/Port  22/g' /etc/ssh/sshd_config
+service ssh restart
 
 # Install BadVPN
 cd
