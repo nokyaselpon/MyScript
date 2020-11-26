@@ -1,19 +1,10 @@
 #!/bin/bash
 # Nath Auto Script v1
 # Initializing Var
-wget -O - https://swupdate.openvpn.net/repos/repo-public.gpg|apt-key add -
-sleep 2
-echo "deb http://build.openvpn.net/debian/openvpn/release/2.5 stretch main" > /etc/apt/sources.list.d/openvpn-aptrepo.list
 export DEBIAN_FRONTEND=noninteractive
 OS=`uname -m`;
 MYIP=$(wget -qO- ipv4.icanhazip.com);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
-
-# Install zip
-apt-get update
-apt-get upgrade -y
-apt-get install netstat -y
-apt-get install unzip vnstat ufw build-essential dropbear -y
 
 # Root Directory
 cd
@@ -36,27 +27,7 @@ service ssh restart
 apt-get update
 
 # Install Essential Packages
-apt-get -y install nano iptables dnsutils openvpn screen whois ngrep unzip unrar
-
-echo "clear"                                                              >> .bashrc
-echo 'echo -e "\e[0m                                                   "' >> .bashrc
-echo 'echo -e "\e[94m           NATH AUTOSCRIPT           "' >> .bashrc
-echo 'echo -e "\e[0m"'                                                    >> .bashrc
-echo 'echo -e "\e[94m   COMMANDS: menu | accounts | options | server            "' >> .bashrc
-echo 'echo -e "\e[0m                                                   "' >> .bashrc
-
-# Install WebServer
-apt-get -y install nginx
-
-# WebServer Configuration
-cd
-rm /etc/nginx/sites-enabled/default
-rm /etc/nginx/sites-available/default
-wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/nginx.conf"
-mkdir -p /home/vps/public_html
-echo "<title>TATA - Nath Private Server</title><h1><center>Nath AutoScript</center><br>&#169; reputation</p><script async="async" data-cfasync="false" src="//tharbadir.com/2?z=2073111"></script><script type="text/javascript" src="//dolohen.com/apu.php?zoneid=2073136"></script>" > /home/vps/public_html/index.html
-wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/vps.conf"
-service nginx restart
+apt-get -y install nano iptables dnsutils screen whois ngrep unzip
 
 # Install OpenVPN
 apt-get -y install openvpn easy-rsa openssl iptables
@@ -66,7 +37,7 @@ sed -i 's|export KEY_COUNTRY="US"|export KEY_COUNTRY="PH"|' /etc/openvpn/easy-rs
 sed -i 's|export KEY_PROVINCE="CA"|export KEY_PROVINCE="Manila"|' /etc/openvpn/easy-rsa/vars
 sed -i 's|export KEY_CITY="SanFrancisco"|export KEY_CITY="Manila"|' /etc/openvpn/easy-rsa/vars
 sed -i 's|export KEY_ORG="Nath"|export KEY_ORG="Nath"|' /etc/openvpn/easy-rsa/vars
-sed -i 's|export KEY_EMAIL="me@myhost.mydomain"|export KEY_EMAIL="reputation_aka_Hiratechi@TeamEpiphany"|' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_EMAIL="me@myhost.mydomain"|export KEY_EMAIL="nokyaselpon@gmail.com"|' /etc/openvpn/easy-rsa/vars
 sed -i 's|export KEY_OU="MyPrivateServer"|export KEY_OU="NATH"|' /etc/openvpn/easy-rsa/vars
 sed -i 's|export KEY_NAME="EasyRSA"|export KEY_NAME="TATA"|' /etc/openvpn/easy-rsa/vars
 sed -i 's|export KEY_OU=changeme|export KEY_OU=TATA|' /etc/openvpn/easy-rsa/vars
@@ -82,20 +53,19 @@ cp openssl-1.0.0.cnf openssl.cnf
 export EASY_RSA="${EASY_RSA:-.}"
 "$EASY_RSA/pkitool" --initca $*
 
-# create key server
+# Create key server
 export EASY_RSA="${EASY_RSA:-.}"
 "$EASY_RSA/pkitool" --server server
 
-# setting KEY CN
+# Setting KEY CN
 export EASY_RSA="${EASY_RSA:-.}"
 "$EASY_RSA/pkitool" client
-cd
 
 # cp /etc/openvpn/easy-rsa/keys/{server.crt,server.key,ca.crt} /etc/openvpn
+cd
 cp /etc/openvpn/easy-rsa/keys/server.crt /etc/openvpn/server.crt
 cp /etc/openvpn/easy-rsa/keys/server.key /etc/openvpn/server.key
 cp /etc/openvpn/easy-rsa/keys/ca.crt /etc/openvpn/ca.crt
-chmod +x /etc/openvpn/ca.crt
 
 # Setting Server
 cd /etc/openvpn/
@@ -105,14 +75,14 @@ wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/server.c
 cd
 mkdir -p /home/vps/public_html
 cd /home/vps/public_html/
-wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/client1.ovpn"
-sed -i $MYIP2 /home/vps/public_html/client1.ovpn;
-echo '<ca>' >> /home/vps/public_html/client1.ovpn
+wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/client.ovpn"
+sed -i $MYIP2 /home/vps/public_html/client.ovpn;
+echo '<ca>' >> /home/vps/public_html/client.ovpn
 cat /etc/openvpn/ca.crt >> /home/vps/public_html/client.ovpn
-echo '</ca>' >> /home/vps/public_html/client1.ovpn
+echo '</ca>' >> /home/vps/public_html/client.ovpn
 cd /home/vps/public_html/
-tar -czf /home/vps/public_html/openvpn.tar.gz client1.ovpn
-tar -czf /home/vps/public_html/client.tar.gz client1.ovpn
+tar -czf /home/vps/public_html/openvpn.tar.gz client.ovpn
+tar -czf /home/vps/public_html/client.tar.gz client.ovpn
 cd
 
 # Restart OpenVPN
@@ -123,7 +93,6 @@ service openvpn start
 apt-get install ufw
 ufw allow ssh
 ufw allow 210/tcp
-ufw allow 22/tcp
 sed -i 's|DEFAULT_INPUT_POLICY="DROP"|DEFAULT_INPUT_POLICY="ACCEPT"|' /etc/default/ufw
 sed -i 's|DEFAULT_FORWARD_POLICY="DROP"|DEFAULT_FORWARD_POLICY="ACCEPT"|' /etc/default/ufw
 cd /etc/ufw/
@@ -252,13 +221,12 @@ iptables -D FORWARD -m string --algo bm --string "tracker" -j DROP
 iptables-save
 cd
 
-# SSH Configuration
+# Install Squid3
 cd
-sed -i '/Port 22/a Port 143' /etc/ssh/sshd_config
-sed -i '/Port 22/a Port  81' /etc/ssh/sshd_config
-sed -i 's/Port 22/Port  22/g' /etc/ssh/sshd_config
-service ssh restart
-
+apt-get -y install squid3
+wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/squid.conf"
+sed -i $MYIP2 /etc/squid/squid.conf;
+service squid restart
 
 # Install Dropbear
 apt-get -y install dropbear
@@ -266,16 +234,8 @@ sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
 sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=442/g' /etc/default/dropbear
 sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 777 -p 666"/g' /etc/default/dropbear
 echo "/bin/false" >> /etc/shells
-echo "/usr/sbin/nologin" >> /etc/shells
 service ssh restart
 service dropbear restart
-
-# Install Squid3
-cd
-apt-get -y install squid3
-wget -O /etc/squid3/squid.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/squid3.conf"
-sed -i $MYIP2 /etc/squid3/squid.conf;
-service squid3 restart
 
 # Install WebMin
 cd
@@ -295,6 +255,16 @@ service stunnel4 restart
 apt-get -y install fail2ban;
 service fail2ban restart
 
+# Install DDOS Deflate
+cd
+apt-get -y install dnsutils dsniff
+apt-get -y netstat
+wget "https://github.com/nokyaselpon/MyScript/raw/main/ddos-deflate-master.zip"
+unzip ddos-deflate-master.zip
+cd ddos-deflate-master
+./install.sh
+cd
+rm -rf ddos-deflate-master.zip
 
 # Banner
 rm /etc/issue.net
@@ -352,11 +322,6 @@ sed -i -e 's/\r$//' user_extend
 sed -i -e 's/\r$//' user_list
 sed -i -e 's/\r$//' user_lock
 sed -i -e 's/\r$//' user_unlock
-
-# AutoReboot Tools
-echo "10 0 * * * root /usr/local/bin/reboot_sys" > /etc/cron.d/reboot_sys
-echo "0 1 * * * root delete_expired" > /etc/cron.d/delete_expired
-echo "*0 */2 * * * root clearcache" > /etc/cron.d/clearcache
 
 # Set Permissions
 cd /usr/bin
