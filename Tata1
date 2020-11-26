@@ -3,7 +3,7 @@
 # Initializing Var
 export DEBIAN_FRONTEND=noninteractive
 OS=`uname -m`;
-MYIP=$(wget -qO- ipv4.icanhanzip.com);
+MYIP=$(wget -qO- ipv4.icanhazip.com);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 
 # Root Directory
@@ -258,7 +258,7 @@ service fail2ban restart
 # Install DDOS Deflate
 cd
 apt-get -y install dnsutils dsniff
-apt-get install net-tools
+apt-get -y netstat
 wget "https://github.com/nokyaselpon/MyScript/raw/main/ddos-deflate-master.zip"
 unzip ddos-deflate-master.zip
 cd ddos-deflate-master
