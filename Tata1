@@ -258,7 +258,7 @@ service fail2ban restart
 # Install DDOS Deflate
 cd
 apt-get -y install dnsutils dsniff
-apt-get -y netstat
+apt-get install net-tools
 wget "https://github.com/nokyaselpon/MyScript/raw/main/ddos-deflate-master.zip"
 unzip ddos-deflate-master.zip
 cd ddos-deflate-master
@@ -380,7 +380,7 @@ echo -e "                                                  "
 echo -e "              Other Features Included             "
 echo -e "    Commands       :   menu | accounts | options | server"
 echo -e "    Timezone       :   Asia/Manila (GMT +8)       "
-echo -e "    Webmin         :   http://xxxxxxxxx:10000/        "
+echo -e "    Webmin         :   http://$MYIP2:10000/        "
 echo -e "    Anti-Torrent   :   [ON]                      "
 echo -e "    Cron Scheduler :   [ON]                       "
 echo -e "    Fail2Ban       :   [ON]                       "
