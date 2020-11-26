@@ -7,7 +7,9 @@ MYIP=$(wget -qO- ipv4.icanhazip.com);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 
 # Install zip
-apt-get install unzip
+apt-get update
+apt-get upgrade -y
+apt-get install unzip vnstat netstat ufw build-essential -y
 
 # Root Directory
 cd
