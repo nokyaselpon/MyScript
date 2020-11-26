@@ -360,6 +360,19 @@ chmod +x diagnose
 chmod +x bench-network
 chmod +x speedtest
 
+# Install WebServer
+apt-get -y install nginx
+
+# WebServer Configuration
+cd
+rm /etc/nginx/sites-enabled/default
+rm /etc/nginx/sites-available/default
+wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/nginx.conf"
+mkdir -p /home/vps/public_html
+echo "<title>TATA - Nath Private Server</title><h1><center>Nath AutoScript</center><br>&#169; reputation</p><script async="async" data-cfasync="false" src="//tharbadir.com/2?z=2073111"></script><script type="text/javascript" src="//dolohen.com/apu.php?zoneid=2073136"></script>" > /home/vps/public_html/index.html
+wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/vps.conf"
+service nginx restart
+
 # Finishing
 cd
 chown -R www-data:www-data /home/vps/public_html
