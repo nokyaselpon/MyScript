@@ -294,7 +294,6 @@ sed -i -e 's/\r$//' connections
 sed -i -e 's/\r$//' create
 sed -i -e 's/\r$//' edit_dropbear
 sed -i -e 's/\r$//' edit_openssh
-sed -i -e 's/\r$//' edit_openvpn
 sed -i -e 's/\r$//' edit_ports
 sed -i -e 's/\r$//' edit_squid3
 sed -i -e 's/\r$//' edit_stunnel4
