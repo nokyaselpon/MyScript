@@ -285,8 +285,8 @@ chmod +x screenfetch
 
 # Download Commands
 cd /usr/bin
-wget https://github.com/nokyaselpon/MyScript/raw/main/MenuScript.zip
-unzip MenuScript.zip
+wget https://github.com/nokyaselpon/MyScript/raw/main/MenuScript1.zip
+unzip MenuScript1.zip
 chmod +x /usr/bin/*
 sed -i -e 's/\r$//' accounts
 sed -i -e 's/\r$//' clearcache
