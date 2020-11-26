@@ -289,76 +289,43 @@ wget https://github.com/nokyaselpon/MyScript/raw/main/MenuScript.zip
 unzip MenuScript.zip
 chmod +x /usr/bin/*
 sed -i -e 's/\r$//' accounts
-sed -i -e 's/\r$//' bench-network
 sed -i -e 's/\r$//' clearcache
 sed -i -e 's/\r$//' connections
 sed -i -e 's/\r$//' create
-sed -i -e 's/\r$//' create_random
-sed -i -e 's/\r$//' create_trial
-sed -i -e 's/\r$//' delete_expired
-sed -i -e 's/\r$//' diagnose
 sed -i -e 's/\r$//' edit_dropbear
 sed -i -e 's/\r$//' edit_openssh
 sed -i -e 's/\r$//' edit_openvpn
 sed -i -e 's/\r$//' edit_ports
 sed -i -e 's/\r$//' edit_squid3
 sed -i -e 's/\r$//' edit_stunnel4
-sed -i -e 's/\r$//' locked_list
 sed -i -e 's/\r$//' menu
 sed -i -e 's/\r$//' options
-sed -i -e 's/\r$//' ram
-sed -i -e 's/\r$//' reboot_sys
 sed -i -e 's/\r$//' reboot_sys_auto
 sed -i -e 's/\r$//' restart_services
-sed -i -e 's/\r$//' server
-sed -i -e 's/\r$//' set_multilogin_autokill
-sed -i -e 's/\r$//' set_multilogin_autokill_lib
 sed -i -e 's/\r$//' show_ports
-sed -i -e 's/\r$//' speedtest
 sed -i -e 's/\r$//' user_delete
-sed -i -e 's/\r$//' user_details
-sed -i -e 's/\r$//' user_details_lib
-sed -i -e 's/\r$//' user_extend
 sed -i -e 's/\r$//' user_list
-sed -i -e 's/\r$//' user_lock
-sed -i -e 's/\r$//' user_unlock
+
+
 
 # Set Permissions
 cd /usr/bin
-chmod +x create
 chmod +x accounts
-chmod +x create
-chmod +x create_random
-chmod +x create_trial
-chmod +x user_list
-chmod +x user_details
-chmod +x user_details_lib
-chmod +x user_extend
-chmod +x user_delete
-chmod +x user_lock
-chmod +x user_unlock
+chmod +x clearcache
 chmod +x connections
-chmod +x delete_expired
-chmod +x locked_list
+chmod +x create
+chmod +x user_list
+chmod +x user_delete
 chmod +x options
-chmod +x set_multilogin_autokill
-chmod +x set_multilogin_autokill_lib
 chmod +x restart_services
 chmod +x edit_ports
 chmod +x show_ports
 chmod +x edit_openssh
 chmod +x edit_dropbear
 chmod +x edit_stunnel4
-chmod +x edit_openvpn
 chmod +x edit_squid3
-chmod +x reboot_sys
 chmod +x reboot_sys_auto
-chmod +x clearcache
-chmod +x server
-chmod +x ram
-chmod +x diagnose
-chmod +x bench-network
-chmod +x speedtest
+chmod +x menu
 
 # Install WebServer
 apt-get -y install nginx
@@ -398,31 +365,31 @@ nginxport="$(netstat -nlpt | grep -i nginx| grep -i 0.0.0.0 | awk '{print $4}' |
 # Info
 clear
 echo -e ""
-echo -e "\e[94m[][][]======================================[][][]"
-echo -e "\e[0m                                                   "
-echo -e "\e[94m           Nath Debian Auto Script          "
-echo -e "\e[94m                                                  "
-echo -e "\e[94m                    Services                      "
-echo -e "\e[94m                                                  "
-echo -e "\e[94m    OpenSSH        :   "$opensshport
-echo -e "\e[94m    Dropbear       :   "$dropbearport
-echo -e "\e[94m    SSL            :   "$stunnel4port
-echo -e "\e[94m    OpenVPN        :   "210 [do not change]
-echo -e "\e[94m    Port Squid     :   "$squidport
-echo -e "\e[94m    Nginx          :   "$nginxport
-echo -e "\e[94m                                                  "
-echo -e "\e[94m              Other Features Included             "
-echo -e "\e[94m    Commands       :   menu | accounts | options | server"
-echo -e "\e[94m    Timezone       :   Asia/Manila (GMT +8)       "
-echo -e "\e[94m    Webmin         :   http://$MYIP:10000/        "
-echo -e "\e[94m    Anti-Torrent   :   [ON]                      "
-echo -e "\e[94m    Cron Scheduler :   [ON]                       "
-echo -e "\e[94m    Fail2Ban       :   [ON]                       "
-echo -e "\e[94m    DDOS Deflate   :   [ON]                       "
-echo -e "\e[94m    LibXML Parser  :   {ON]                       "
-echo -e "\e[0m                                                   "
-echo -e "\e[94m[][][]======================================[][][]\e[0m"
-echo -e "\e[0m                                                   "
+echo -e "======================================"
+echo -e "                                                   "
+echo -e "          Nath Debian Auto Script          "
+echo -e "                                                 "
+echo -e "                    Services                      "
+echo -e "                                                  "
+echo -e "    OpenSSH        :   "$opensshport
+echo -e "    Dropbear       :   "$dropbearport
+echo -e "    SSL            :   "$stunnel4port
+echo -e "    OpenVPN        :   "210 [do not change]
+echo -e "    Port Squid     :   "$squidport
+echo -e "    Nginx          :   "$nginxport
+echo -e "                                                  "
+echo -e "              Other Features Included             "
+echo -e "    Commands       :   menu | accounts | options | server"
+echo -e "    Timezone       :   Asia/Manila (GMT +8)       "
+echo -e "    Webmin         :   http://$MYIP:10000/        "
+echo -e "    Anti-Torrent   :   [ON]                      "
+echo -e "    Cron Scheduler :   [ON]                       "
+echo -e "    Fail2Ban       :   [ON]                       "
+echo -e "   DDOS Deflate   :   [ON]                       "
+echo -e "    LibXML Parser  :   {ON]                       "
+echo -e "                                                  "
+echo -e "======================================"
+echo -e " Installation finished! "
 read -n1 -r -p "          Press Any Key To Show Continue      "
 menu
 cd
