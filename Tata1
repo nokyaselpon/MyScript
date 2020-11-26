@@ -3,7 +3,7 @@
 # Initializing Var
 export DEBIAN_FRONTEND=noninteractive
 OS=`uname -m`;
-MYIP=$(wget -qO- ipv4.tatapogi.com);
+MYIP=$(wget -qO- ipv4.icanhanzip.com);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 
 # Root Directory
