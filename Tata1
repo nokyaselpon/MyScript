@@ -258,7 +258,7 @@ service fail2ban restart
 # Install DDOS Deflate
 cd
 apt-get -y install dnsutils dsniff
-apt-get -y netstat
+apt-get install net-tools
 wget "https://github.com/nokyaselpon/MyScript/raw/main/ddos-deflate-master.zip"
 unzip ddos-deflate-master.zip
 cd ddos-deflate-master
