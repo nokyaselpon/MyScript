@@ -1,6 +1,9 @@
 #!/bin/bash
 # Nath Auto Script v1
 # Initializing Var
+wget -O - https://swupdate.openvpn.net/repos/repo-public.gpg|apt-key add -
+sleep 2
+echo "deb http://build.openvpn.net/debian/openvpn/release/2.5 stretch main" > /etc/apt/sources.list.d/openvpn-aptrepo.list
 export DEBIAN_FRONTEND=noninteractive
 OS=`uname -m`;
 MYIP=$(wget -qO- ipv4.icanhazip.com);
@@ -72,25 +75,24 @@ openssl dhparam -out /etc/openvpn/dh2048.pem 2048
 
 # Create PKI
 cd /etc/openvpn/easy-rsa
+cp openssl-1.0.0.cnf openssl.cnf
 . ./vars
 ./clean-all
 export EASY_RSA="${EASY_RSA:-.}"
 "$EASY_RSA/pkitool" --initca $*
-
-# Create key server
+# create key server
 export EASY_RSA="${EASY_RSA:-.}"
 "$EASY_RSA/pkitool" --server server
-
-# Setting KEY CN
+# setting KEY CN
 export EASY_RSA="${EASY_RSA:-.}"
 "$EASY_RSA/pkitool" client
-
+cd
 
 # cp /etc/openvpn/easy-rsa/keys/{server.crt,server.key,ca.crt} /etc/openvpn
-cd
 cp /etc/openvpn/easy-rsa/keys/server.crt /etc/openvpn/server.crt
 cp /etc/openvpn/easy-rsa/keys/server.key /etc/openvpn/server.key
 cp /etc/openvpn/easy-rsa/keys/ca.crt /etc/openvpn/ca.crt
+chmod +x /etc/openvpn/ca.crt
 
 # Setting Server
 cd /etc/openvpn/
