@@ -26,7 +26,6 @@ apt-get update;apt-get -y install wget curl;
 
 # Local Time Manila
 ln -fs /usr/share/zoneinfo/Asia/Manila /etc/localtime
-
 # Local Configuration
 sed -i 's/AcceptEnv/#AcceptEnv/g' /etc/ssh/sshd_config
 service ssh restart
@@ -80,9 +79,11 @@ cp openssl-1.0.0.cnf openssl.cnf
 ./clean-all
 export EASY_RSA="${EASY_RSA:-.}"
 "$EASY_RSA/pkitool" --initca $*
+
 # create key server
 export EASY_RSA="${EASY_RSA:-.}"
 "$EASY_RSA/pkitool" --server server
+
 # setting KEY CN
 export EASY_RSA="${EASY_RSA:-.}"
 "$EASY_RSA/pkitool" client
@@ -102,14 +103,14 @@ wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/server.c
 cd
 mkdir -p /home/vps/public_html
 cd /home/vps/public_html/
-wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/client.ovpn"
-sed -i $MYIP2 /home/vps/public_html/client.ovpn;
-echo '<ca>' >> /home/vps/public_html/client.ovpn
+wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/client1.ovpn"
+sed -i $MYIP2 /home/vps/public_html/client1.ovpn;
+echo '<ca>' >> /home/vps/public_html/client1.ovpn
 cat /etc/openvpn/ca.crt >> /home/vps/public_html/client.ovpn
-echo '</ca>' >> /home/vps/public_html/client.ovpn
+echo '</ca>' >> /home/vps/public_html/client1.ovpn
 cd /home/vps/public_html/
-tar -czf /home/vps/public_html/openvpn.tar.gz client.ovpn
-tar -czf /home/vps/public_html/client.tar.gz client.ovpn
+tar -czf /home/vps/public_html/openvpn.tar.gz client1.ovpn
+tar -czf /home/vps/public_html/client.tar.gz client1.ovpn
 cd
 
 # Restart OpenVPN
