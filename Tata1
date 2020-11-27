@@ -376,29 +376,30 @@ clear
 echo -e ""
 echo -e "==================================================="
 echo -e "                                                   "
-echo -e "             Nath Debian Auto Script          "
+echo -e "             Nath Debian AutoScript          "
 echo -e "                                                 "
-echo -e "                   Services                      "
+echo -e "                   Ports                      "
 echo -e "                                                  "
 echo -e "    OpenSSH        :   "$opensshport
 echo -e "    Dropbear       :   "$dropbearport
 echo -e "    SSL            :   "$stunnel4port
-echo -e "    OpenVPN        :   "210 [do not change]
+echo -e "    OpenVPN        :   "210
 echo -e "    Port Squid     :   "$squidport
 echo -e "    Nginx          :   "$nginxport
 echo -e "                                                  "
-echo -e "              Other Features Included             "
+echo -e "                   Features             "
+echo -e " "
 echo -e "    Commands       :   menu /accounts /options "
 echo -e "    Timezone       :   Asia/Manila (GMT +8)       "
 echo -e "    Webmin         :   http://$MYIP:10000/        "
 echo -e "    Anti-Torrent   :   [ON]                      "
-echo -e "    Cron Scheduler :   [ON]                       "
 echo -e "    Fail2Ban       :   [ON]                       "
 echo -e "    DDOS Deflate   :   [ON]                       "
 echo -e "    LibXML Parser  :   {ON]                       "
 echo -e "                                                  "
 echo -e "==================================================="
-echo -e " Installation finished! "
+echo -e "               Installation finished!             "
 echo -e " "
-read -n1 -r -p "          Press Any Key To Show Continue      "
+read -n1 -r -p "   Type "menu" for the list of commands      "
+echo -e " "
 cd
