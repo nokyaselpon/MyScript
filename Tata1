@@ -266,6 +266,16 @@ cd ddos-deflate-master
 cd
 rm -rf ddos-deflate-master.zip
 
+# Install BadVPN
+cd
+wget -O /usr/bin/badvpn-udpgw "https://github.com/nokyaselpon/MyScript/raw/main/badvpn-udpgw"
+if [ "$OS" == "x86_64" ]; then
+  wget -O /usr/bin/badvpn-udpgw "https://github.com/nokyaselpon/MyScript/raw/main/badvpn-udpgw64"
+fi
+sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
+chmod +x /usr/bin/badvpn-udpgw
+screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
+
 # Banner
 rm /etc/issue.net
 wget -O /etc/issue.net "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/issue.net"
@@ -285,8 +295,8 @@ chmod +x screenfetch
 
 # Download Commands
 cd /usr/bin
-wget https://github.com/nokyaselpon/MyScript/raw/main/MenuScript1.zip
-unzip MenuScript1.zip
+wget https://github.com/nokyaselpon/MyScript/raw/main/SimpleMenu.zip
+unzip SimpleMenu.zip
 chmod +x /usr/bin/*
 sed -i -e 's/\r$//' accounts
 sed -i -e 's/\r$//' clearcache
@@ -364,11 +374,11 @@ nginxport="$(netstat -nlpt | grep -i nginx| grep -i 0.0.0.0 | awk '{print $4}' |
 # Info
 clear
 echo -e ""
-echo -e "======================================"
+echo -e "==================================================="
 echo -e "                                                   "
-echo -e "          Nath Debian Auto Script          "
+echo -e "             Nath Debian Auto Script          "
 echo -e "                                                 "
-echo -e "                    Services                      "
+echo -e "                   Services                      "
 echo -e "                                                  "
 echo -e "    OpenSSH        :   "$opensshport
 echo -e "    Dropbear       :   "$dropbearport
@@ -378,17 +388,17 @@ echo -e "    Port Squid     :   "$squidport
 echo -e "    Nginx          :   "$nginxport
 echo -e "                                                  "
 echo -e "              Other Features Included             "
-echo -e "    Commands       :   menu | accounts | options | server"
+echo -e "    Commands       :   menu /accounts /options "
 echo -e "    Timezone       :   Asia/Manila (GMT +8)       "
-echo -e "    Webmin         :   http://xxxxxxxxx:10000/        "
+echo -e "    Webmin         :   http://$MYIP:10000/        "
 echo -e "    Anti-Torrent   :   [ON]                      "
 echo -e "    Cron Scheduler :   [ON]                       "
 echo -e "    Fail2Ban       :   [ON]                       "
-echo -e "   DDOS Deflate   :   [ON]                       "
+echo -e "    DDOS Deflate   :   [ON]                       "
 echo -e "    LibXML Parser  :   {ON]                       "
 echo -e "                                                  "
-echo -e "======================================"
+echo -e "==================================================="
 echo -e " Installation finished! "
+echo -e " "
 read -n1 -r -p "          Press Any Key To Show Continue      "
-menu
 cd
