@@ -281,7 +281,40 @@ sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/
 chmod +x /usr/bin/badvpn-udpgw
 screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
 
+# Setup Privoxy
+apt-get install -y privoxy
+echo 'Setting up Privoxy'
+mkdir /etc/privoxy/
+cat <<EOF > /etc/privoxy/config
+user-manual /usr/share/doc/privoxy/user-manual
+confdir /etc/privoxy
+logdir /var/log/privoxy
+actionsfile match-all.action
+actionsfile default.action
+actionsfile user.action
+filterfile default.filter
+filterfile user.filter
+logfile logfile
+listen-address  :$Privoxy
+toggle 1
+enable-remote-toggle  0
+enable-remote-http-toggle  0
+enable-edit-actions 0
+enforce-blocks 0
+buffer-limit 4096
+enable-proxy-authentication-forwarding 0
+forwarded-connect-retries  0
+accept-intercepted-requests 0
+allow-cgi-request-crunching 0
+split-large-forms 0
+keep-alive-timeout 5
+tolerate-pipelining 1
+socket-timeout 300
+EOF
 
+#
+systemctl restart privoxy
+systemctl enable privoxy
 
 # Banner
 rm /etc/issue.net
