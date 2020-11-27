@@ -312,6 +312,36 @@ tolerate-pipelining 1
 socket-timeout 300
 EOF
 
+apt-get install -y resolvconf privoxy stunnel unzip iproute2
+
+# Install OHP
+echo 'Installing ohpserver'
+mkdir /etc/ohpserver/
+wget https://github.com/lfasmpao/open-http-puncher/releases/download/0.1/ohpserver-linux32.zip
+unzip ohpserver-linux32.zip
+rm ohpserver-linux32.zip
+mkdir /etc/ohpserver/
+chmod +x /etc/ohpserver/ohpserver
+
+# Setup ohpserver
+echo 'Setup ohpserver'
+cat <<EOF > /etc/systemd/system/ohpserver.service
+[Unit]
+Description=Daemonize OpenHTTP Puncher Server
+Wants=network.target
+After=network.target
+
+[Service]
+ExecStart=/etc/ohpserver -port 8996 -proxy 127.0.0.1:$Privoxy -tunnel $MYIP:666
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl start ohpserver
+systemctl enable ohpserver
+systemctl stop systemd-resolved
+
 #
 systemctl restart privoxy
 systemctl enable privoxy
