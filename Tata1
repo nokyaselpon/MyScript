@@ -312,6 +312,32 @@ tolerate-pipelining 1
 socket-timeout 300
 EOF
 
+#Ohp server
+wget https://github.com/lfasmpao/open-http-puncher/releases/download/0.1/ohpserver-linux32.zip
+unzip ohpserver-linux32.zip
+chmod 755 ohpserver
+sudo mv ohpserver /usr/local/bin/
+
+#setup
+cat <<EOF > /etc/systemd/system/ohpserver.service
+[Unit]
+Description=Daemonize OpenHTTP Puncher Server
+Wants=network.target
+After=network.target
+
+
+[Service]
+ExecStart=/usr/local/bin/ohpserver -port 8090 -proxy 127.0.0.1:$Privoxy -tunnel 127.0.0.1:666
+Restart=always
+RestartSec=3
+[Install]
+WantedBy=multi-user.target
+EOF
+
+#services
+sudo systemctl daemon-reload
+sudo systemctl restart ohpserver
+sudo systemctl enable ohpserver
 
 # Banner
 rm /etc/issue.net
@@ -424,6 +450,7 @@ echo -e "    SSL            :   "$stunnel4port
 echo -e "    OpenVPN        :   "210
 echo -e "    Port Squid     :   "$squidport
 echo -e "    Nginx          :   "$nginxport
+echo -e "    OHP port          :   8090  "
 echo -e "                                                  "
 echo -e "                   Features             "
 echo -e " "
