@@ -1,3 +1,0 @@
-#!/bin/bash
-# Nath Auto Script
-/usr/local/bin/ohpserver -port 8091 -proxy 127.0.0.1:32754 -tunnel 127.0.0.1:666
