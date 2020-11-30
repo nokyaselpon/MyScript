@@ -4,7 +4,7 @@ import socket, threading, thread, select, signal, sys, time
 from os import system
 system("clear")
 #conexao
-IP = $(wget -qO- ipv4.icanhazip.com)
+IP = '0.0.0.0'
 try:
    PORT = int(sys.argv[1])
 except:
