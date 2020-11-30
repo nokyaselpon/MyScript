@@ -5,7 +5,7 @@ import socket, threading, thread, select, signal, sys, time
 from os import system
 system("clear")
 #conexao
-IP = $(wget -qO- ipv4.icanhazip.com);
+IP = '139.162.27.128'
 try:
    PORT = 8600
 except:
