@@ -5,18 +5,18 @@ import socket, threading, thread, select, signal, sys, time
 from os import system
 system("clear")
 #conexao
-IP = '0.0.0.0'
+IP = '139.162.117.203'
 try:
    PORT = int(sys.argv[1])
 except:
-   PORT = 80
+   PORT = 8082
 PASS = ''
 BUFLEN = 8196 * 8
 TIMEOUT = 60
 MSG = 'SSHPLUS'
 COR = '<font color="null">'
 FTAG = '</font>'
-DEFAULT_HOST = '0.0.0.0:22'
+DEFAULT_HOST = '139.162.117.203:22'
 RESPONSE = "HTTP/1.1 200 " + str(COR) + str(MSG) + str(FTAG) + "\r\n\r\n"
  
 class Server(threading.Thread):
@@ -172,7 +172,7 @@ class ConnectionHandler(threading.Thread):
             host = host[:i]
         else:
             if self.method=='CONNECT':
-                port = 443
+                port = 666
             else:
                 port = 22
 
