@@ -78,5 +78,3 @@ fun_socks() {
 				echo -e "\033[1;32mSOCKS ATIVADO COM SUCESSO\033[1;33m"
 				sleep 3
 				fun_socks
-			fi
-	}
