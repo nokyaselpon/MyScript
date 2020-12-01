@@ -485,10 +485,3 @@ echo -e " "
 read -n1 -r -p "   Type "menu" for the list of commands      "
 echo -e " "
 cd
-create
-tata
-tata
-60
-sudo service ohpserver restart && watch -n 56 'sudo service ohpserver stop && sudo service ohpserver start'
-
-
