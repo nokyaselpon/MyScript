@@ -7,7 +7,7 @@ system("clear")
 
 IP = '0.0.0.0'
 try:
-   PORT = 9000
+   PORT = 9001
 except:
    PORT = 80
 PASS = ''
@@ -49,7 +49,8 @@ class Server(threading.Thread):
                 conn.start();
                 self.addConn(conn)
         finally:
-            self.running = False
+           If self.running
+	    self.soc.settimeout(50)
             self.soc.close()
             
     def printLog(self, log):
