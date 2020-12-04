@@ -375,8 +375,8 @@ sudo systemctl start ohpserver
 sudo systemctl enable ohpserver
 
 #proxysocks
-wget https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/prox.py
-python prox.py > out &
+wget https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/foxeyy.py
+python foxeyy.py > out &
 sleep 5
 echo -e "Socks proxy done installation"
 
