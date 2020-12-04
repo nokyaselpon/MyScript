@@ -1,0 +1,9 @@
+#!/bin/bash
+#socks
+
+wget https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/yahoo.py
+python yahoo.py
+sleep 5
+
+echo "done socks!"
+cd
