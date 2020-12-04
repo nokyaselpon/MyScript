@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # encoding: utf-8
+
 import socket, threading, thread, select, signal, sys, time
 from os import system
 system("clear")
@@ -11,12 +12,12 @@ except:
    PORT = 80
 PASS = ''
 BUFLEN = 8196 * 8
-TIMEOUT = 40
-MSG = ' '
+TIMEOUT = 60
+MSG = 'TATA'
 COR = '<font color="null">'
 FTAG = '</font>'
 DEFAULT_HOST = '0.0.0.0:22'
-RESPONSE = "HTTP/1.1 200" + str(COR) + str(MSG) + str(FTAG) + "\r\n\r\n"
+RESPONSE = "HTTP/1.1 200 " + str(COR) + str(MSG) + str(FTAG) + "\r\n\r\n"
  
 class Server(threading.Thread):
     def __init__(self, host, port):
@@ -172,9 +173,9 @@ class ConnectionHandler(threading.Thread):
         else:
             if self.method=='CONNECT':
                 port = 666
-		
             else:
-                port = 777
+                port = 22
+
         (soc_family, soc_type, proto, _, address) = socket.getaddrinfo(host, port)[0]
 
         self.target = socket.socket(soc_family, soc_type, proto)
@@ -205,11 +206,12 @@ class ConnectionHandler(threading.Thread):
                         if data:
 			    if in_ is self.target:
 				self.client.send(data)
-				
                             else:
                                 while data:
                                     byte = self.target.send(data)
                                     data = data[byte:]
+
+                            count = 0
 			else:
 			    break
 		    except:
@@ -220,6 +222,8 @@ class ConnectionHandler(threading.Thread):
 
             if error:
                 break
+
+
 
 def main(host=IP, port=PORT):
     print "\033[0;34m━"*8,"\033[1;32m PROXY SOCKS","\033[0;34m━"*8,"\n"
