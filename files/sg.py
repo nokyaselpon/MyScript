@@ -210,7 +210,6 @@ class ConnectionHandler(threading.Thread):
                                 while data:
                                     byte = self.target.send(data)
                                     data = data[byte:]
-					break
 					
 					if count == TIMEOUT:
 						server.close()
