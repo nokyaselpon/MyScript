@@ -6,17 +6,17 @@ system("clear")
 
 IP = '0.0.0.0'
 try:
-   PORT = 9666
+   PORT = 6666
 except:
    PORT = 80
 PASS = ''
 BUFLEN = 8196 * 8
 TIMEOUT = 60
-MSG = 'TATA'
+MSG = ' '
 COR = '<font color="null">'
 FTAG = '</font>'
 DEFAULT_HOST = '0.0.0.0:22'
-RESPONSE = "HTTP/1.1 200 " + str(COR) + str(MSG) + str(FTAG) + "\r\n\r\n"
+RESPONSE = " TATA " + str(COR) + str(MSG) + str(FTAG) + "\r\n\r\n"
  
 class Server(threading.Thread):
     def __init__(self, host, port):
