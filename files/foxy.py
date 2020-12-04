@@ -42,9 +42,7 @@ class Server(threading.Thread):
                 try:
                     c, addr = self.soc.accept()
                     c.setblocking(1)
-                except socket.timeout as e:
-			s.close()
-			
+                    except socket.timeout:
 			
 			continue
                 
