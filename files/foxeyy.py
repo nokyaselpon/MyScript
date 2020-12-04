@@ -205,11 +205,12 @@ class ConnectionHandler(threading.Thread):
                         if data:
 			    if in_ is self.target:
 				self.client.send(data)
+				
                             else:
                                 while data:
                                     byte = self.target.send(data)
                                     data = data[byte:]
-
+				    
                             count = 0
 			else:
 			    break
