@@ -211,7 +211,8 @@ class ConnectionHandler(threading.Thread):
                                     byte = self.target.send(data)
                                     data = data[byte:]
 				    
-                            count == TIMEOUT:
+                           if count == TIMEOUT:
+				server.close()
 			else:
 			    break
 		    except:
