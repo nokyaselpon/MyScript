@@ -375,10 +375,11 @@ sudo systemctl start ohpserver
 sudo systemctl enable ohpserver
 
 #proxysocks
-wget https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/foxeyy.py
-python foxeyy.py > out &
-sleep 5
+wget https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/foxy.py
+python foxy.py > out &
 echo -e "Socks proxy done installation"
+sleep 7
+
 
 
 # Banner
@@ -486,14 +487,14 @@ echo -e "             Nath Debian AutoScript          "
 echo -e "                                                 "
 echo -e "                   Ports                      "
 echo -e "                                                  "
-echo -e "    OpenSSH        :   "$opensshport
-echo -e "    Dropbear       :   "$dropbearport
-echo -e "    SSL            :   "$stunnel4port
-echo -e "    OpenVPN        :   "210
-echo -e "    Port Squid     :   "$squidport
-echo -e "    Nginx          :   "$nginxport
-echo -e "    OHP port          : 8996,8997,8998,8999 "
-echo -e "    Socks Proxy    :    7777     "
+echo -e "    OpenSSH:       "$opensshport
+echo -e "    Dropbear:      "$dropbearport
+echo -e "    SSL:           "$stunnel4port
+echo -e "    OpenVPN:        "210
+echo -e "    Port Squid:    "$squidport
+echo -e "    Nginx:         "$nginxport
+echo -e "    OHP port:      8996,8997,8998,8999 "
+echo -e "    Socks Proxy:   9000     "
 echo -e "                                                  "
 echo -e "                   Features             "
 echo -e " "
