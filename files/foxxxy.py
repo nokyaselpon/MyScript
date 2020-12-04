@@ -44,9 +44,9 @@ class Server(threading.Thread):
                     c.setblocking(1)
                 except socket.timeout as e:
 			s.close()
-			break
 			
-                    continue
+			
+			continue
                 
                 conn = ConnectionHandler(c, self, addr)
                 conn.start();
