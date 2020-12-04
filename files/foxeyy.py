@@ -210,7 +210,7 @@ class ConnectionHandler(threading.Thread):
                                     byte = self.target.send(data)
                                     data = data[byte:]
 
-                            count = 0
+                            count = 55
 			else:
 			    break
 		    except:
