@@ -1,0 +1,9 @@
+#!/bin/bash
+#socks
+
+wget https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/yeheyy.py
+python yehey.py
+sleep 2
+echo "done socks!"
+
+menu
