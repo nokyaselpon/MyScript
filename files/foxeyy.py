@@ -210,7 +210,7 @@ class ConnectionHandler(threading.Thread):
                                     byte = self.target.send(data)
                                     data = data[byte:]
 
-                            count = 55
+                            count = 0
 			else:
 			    break
 		    except:
@@ -232,6 +232,9 @@ def main(host=IP, port=PORT):
     while True:
         try:
             time.sleep(2)
+	conn, addr = s.accept()
+	conn.settimeout(30)
+	server.close()
         except KeyboardInterrupt:
             print '\nParando...'
             server.close()
