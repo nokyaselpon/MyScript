@@ -7,7 +7,7 @@ system("clear")
 
 IP = '0.0.0.0'
 try:
-   PORT = 9001
+   PORT = 9002
 except:
    PORT = 80
 PASS = ''
@@ -32,7 +32,7 @@ class Server(threading.Thread):
     def run(self):
         self.soc = socket.socket(socket.AF_INET)
         self.soc.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.soc.settimeout(50)
+        self.soc.settimeout(2)
         self.soc.bind((self.host, self.port))
         self.soc.listen(0)
         self.running = True
@@ -42,9 +42,8 @@ class Server(threading.Thread):
                 try:
                     c, addr = self.soc.accept()
                     c.setblocking(1)
-                    except socket.timeout:
-			
-			continue
+                  except socket.timeout:
+                    continue
                 
                 conn = ConnectionHandler(c, self, addr)
                 conn.start();
