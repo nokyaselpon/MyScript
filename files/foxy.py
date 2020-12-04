@@ -6,7 +6,7 @@ system("clear")
 
 IP = '0.0.0.0'
 try:
-   PORT = (3333,2222,1111)
+   PORT = 2222
 except:
    PORT = 80
 PASS = ''
