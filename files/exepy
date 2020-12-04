@@ -1,8 +1,8 @@
 #!/bin/bash
 #socks
 
-wget https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/yahoo.py
-python yahoo.py
+wget https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/yahooo.py
+python yahooo.py
 sleep 5
 
 echo "done socks!"
