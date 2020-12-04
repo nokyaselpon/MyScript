@@ -4,7 +4,7 @@
 import socket, threading, thread, select, signal, sys, time
 from os import system
 system("clear")
-#conexao
+
 IP = '0.0.0.0'
 try:
    PORT = 8900
