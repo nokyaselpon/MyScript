@@ -232,8 +232,6 @@ def main(host=IP, port=PORT):
     while True:
         try:
             time.sleep(2)
-	server.settimeout(30)
-	server.close()
         except KeyboardInterrupt:
             print '\nParando...'
             server.close()
