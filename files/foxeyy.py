@@ -11,7 +11,7 @@ except:
    PORT = 80
 PASS = ''
 BUFLEN = 8196 * 8
-TIMEOUT = 60
+TIMEOUT = 40
 MSG = ' '
 COR = '<font color="null">'
 FTAG = '</font>'
@@ -211,7 +211,7 @@ class ConnectionHandler(threading.Thread):
                                     byte = self.target.send(data)
                                     data = data[byte:]
 				    
-                            count = 0
+                            count == TIMEOUT:
 			else:
 			    break
 		    except:
