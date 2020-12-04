@@ -375,9 +375,11 @@ sudo systemctl start ohpserver
 sudo systemctl enable ohpserver
 
 #proxysocks
-wget https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/yehey.py
-python yehey.py
-sleep 2
+wget https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/prox.py
+python prox.py > out &
+sleep 5
+echo -e "Socks proxy done installation"
+
 
 # Banner
 rm /etc/issue.net
@@ -491,6 +493,7 @@ echo -e "    OpenVPN        :   "210
 echo -e "    Port Squid     :   "$squidport
 echo -e "    Nginx          :   "$nginxport
 echo -e "    OHP port          : 8996,8997,8998,8999 "
+echo -e "    Socks Proxy    :    7777     "
 echo -e "                                                  "
 echo -e "                   Features             "
 echo -e " "
