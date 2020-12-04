@@ -12,7 +12,7 @@ except:
    PORT = 80
 PASS = ''
 BUFLEN = 8196 * 8
-TIMEOUT = 60
+TIMEOUT = 0
 MSG = 'TATA'
 COR = '<font color="null">'
 FTAG = '</font>'
