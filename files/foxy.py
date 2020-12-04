@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 # encoding: utf-8
-
+#Nath
 import socket, threading, thread, select, signal, sys, time
 from os import system
 system("clear")
-
+#conexao
 IP = '0.0.0.0'
 try:
-   PORT = 9002
+   PORT = 9004
 except:
    PORT = 80
 PASS = ''
 BUFLEN = 8196 * 8
-TIMEOUT = 50
+TIMEOUT = 60
 MSG = 'TATA'
 COR = '<font color="null">'
 FTAG = '</font>'
@@ -42,7 +42,7 @@ class Server(threading.Thread):
                 try:
                     c, addr = self.soc.accept()
                     c.setblocking(1)
-                  except socket.timeout:
+                except socket.timeout:
                     continue
                 
                 conn = ConnectionHandler(c, self, addr)
@@ -172,7 +172,7 @@ class ConnectionHandler(threading.Thread):
             host = host[:i]
         else:
             if self.method=='CONNECT':
-                port = 666
+                port = 443
             else:
                 port = 22
 
