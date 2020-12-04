@@ -49,8 +49,7 @@ class Server(threading.Thread):
                 conn.start();
                 self.addConn(conn)
         finally:
-           If self.running
-	    self.soc.settimeout(50)
+            self.running = False
             self.soc.close()
             
     def printLog(self, log):
