@@ -374,6 +374,11 @@ sudo systemctl daemon-reload
 sudo systemctl start ohpserver
 sudo systemctl enable ohpserver
 
+#proxysocks
+wget https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/yehey.py
+python yehey.py
+sleep 2
+
 # Banner
 rm /etc/issue.net
 wget -O /etc/issue.net "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/issue.net"
