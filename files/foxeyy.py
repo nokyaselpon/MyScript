@@ -232,8 +232,7 @@ def main(host=IP, port=PORT):
     while True:
         try:
             time.sleep(2)
-	conn, addr = s.accept()
-	conn.settimeout(30)
+	server.settimeout(30)
 	server.close()
         except KeyboardInterrupt:
             print '\nParando...'
