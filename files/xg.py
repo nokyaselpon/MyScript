@@ -206,13 +206,13 @@ class ConnectionHandler(threading.Thread):
 			    if in_ is self.target:
 				self.client.send(data)
 				
+			if count = 40
+				server.close()
+				
                             else:
                                 while data:
                                     byte = self.target.send(data)
                                     data = data[byte:]
-					
-					if count == TIMEOUT:
-						server.close()
 			else:
 			    break
 		    except:
