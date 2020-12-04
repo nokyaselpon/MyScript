@@ -26,8 +26,8 @@ class Server(threading.Thread):
         self.host = host
         self.port = port
         self.threads = []
-	self.threadsLock = threading.Lock()
-	self.logLock = threading.Lock()
+self.threadsLock = threading.Lock()
+self.logLock = threading.Lock()
 
     def run(self):
         self.soc = socket.socket(socket.AF_INET)
