@@ -254,6 +254,7 @@ service squid restart
 # Install Tinyproxy
 apt-get -y install tinyproxy
 wget -O /etc/tinyproxy/tinyproxy.conf "https://github.com/nokyaselpon/MyScript/raw/main/files/tinyproxy.conf"
+sed -i $MYIP2 /etc/tinyproxy/tinyproxy.conf;
 service tinyproxy restart
 
 # Install Dropbear
