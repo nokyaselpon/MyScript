@@ -496,8 +496,9 @@ echo -e "    SSL:           "$stunnel4port
 echo -e "    OpenVPN:        "210
 echo -e "    Port Squid:    "$squidport
 echo -e "    Nginx:         "$nginxport
-echo -e "    OHP port:      8996,8997,8998,8999 "
+echo -e "    OHP port:      8995,8996,8997,8998, "
 echo -e "    Socks Proxy:   9000     "
+echo -e "    Tinyproxy: 6500 "
 echo -e "                                                  "
 echo -e "                   Features             "
 echo -e " "
@@ -510,7 +511,7 @@ echo -e "    Fail2Ban       :   [ON]                       "
 echo -e "    DDOS Deflate   :   [ON]                       "
 echo -e "                                                  "
 echo -e "==================================================="
-echo -e "               Installation finished!             "
+echo -e "            Installation finished!             "
 echo -e " "
 read -n1 -r -p "   Type "menu" for the list of commands      "
 echo -e " "
