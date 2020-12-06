@@ -251,6 +251,11 @@ wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/nokyaselpon/MyS
 sed -i $MYIP2 /etc/squid/squid.conf;
 service squid restart
 
+# Install Tinyproxy
+apt-get -y install tinyproxy
+wget -O /etc/tinyproxy/tinyproxy.conf "https://github.com/nokyaselpon/MyScript/raw/main/files/tinyproxy.conf"
+service tinyproxy restart
+
 # Install Dropbear
 apt-get -y install dropbear
 sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
@@ -329,6 +334,47 @@ keep-alive-timeout 5
 tolerate-pipelining 1
 socket-timeout 300
 EOF
+
+#Ohp server
+wget https://github.com/lfasmpao/open-http-puncher/releases/download/0.1/ohpserver-linux32.zip
+unzip ohpserver-linux32.zip
+chmod 755 ohpserver
+sudo mv ohpserver /usr/local/bin/
+
+#ohp setup
+sudo mkdir /etc/ohpserver
+wget https://github.com/lfasmpao/open-http-puncher/releases/download/0.1/ohpserver-linux32.zip
+unzip ohpserver-linux32.zip
+chmod 755 ohpserver
+sudo mv ohpserver /etc/ohpserver/
+
+#ohpfiles
+wget https://github.com/nokyaselpon/MyScript/raw/main/files/hello.zip
+unzip hello.zip
+chmod 755 simple
+chmod 755 stop
+sudo mv simple /etc/ohpserver/
+sudo mv stop /etc/ohpserver/
+
+#Setting-up ohp daemon
+cat <<EOF > /etc/systemd/system/ohpserver.service
+[Unit]
+Description=OpenHTTP Puncher Server
+Wants=network.target
+After=network.target
+[Service]
+ExecStart=/bin/bash /etc/ohpserver/simple 2>/dev/null
+ExecStop=/bin/bash /etc/ohpserver/stop 2>/dev/null
+Restart=always
+RestartSec=3
+[Install]
+WantedBy=multi-user.target
+EOF
+
+#services
+sudo systemctl daemon-reload
+sudo systemctl start ohpserver
+sudo systemctl enable ohpserver
 
 #proxysocks
 wget https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/foxy.py
