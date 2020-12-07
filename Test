@@ -514,6 +514,7 @@ echo -e "    Nginx:         "$nginxport
 echo -e "    OHP port:      8995,8996,8997,8998, "
 echo -e "    Socks Proxy:   9000     "
 echo -e "    Tinyproxy: 6500 "
+echo -e "    Autorecon Port: 7575"
 echo -e "                                                  "
 echo -e "                   Features             "
 echo -e " "
