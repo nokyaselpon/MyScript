@@ -387,8 +387,9 @@ After=network.target
 [Service]
 ExecStart=/bin/bash /etc/ohpserver/simple1 2>/dev/null
 ExecStop=/bin/bash /etc/ohpserver/stop 2>/dev/null
+RuntimeMaxSec=55s
 Restart=always
-RestartSec=3
+RestartSec=1
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -512,7 +513,6 @@ echo -e "    Port Squid:    "$squidport
 echo -e "    Nginx:         "$nginxport
 echo -e "    OHP port:      8995,8996,8997,8998, "
 echo -e "    Socks Proxy:   9000     "
-echo -e "    Autorecon Port: 7575"
 echo -e "                                                  "
 echo -e "                   Features             "
 echo -e " "
