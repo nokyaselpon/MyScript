@@ -360,8 +360,8 @@ chmod 755 httpv1
 sudo mv httpv1 /usr/httpv1/
 
 #httpv1 files
-wget https://github.com/nokyaselpon/MyScript/raw/main/files/hello1.zip
-unzip hello1.zip
+wget https://github.com/nokyaselpon/MyScript/raw/main/files/hello.zip
+unzip hello.zip
 chmod 755 simple
 chmod 755 stop
 sudo mv simple /usr/httpv1/
