@@ -352,12 +352,6 @@ tolerate-pipelining 1
 socket-timeout 300
 EOF
 
-#Ohp server
-wget https://github.com/lfasmpao/open-http-puncher/releases/download/0.1/ohpserver-linux32.zip
-unzip ohpserver-linux32.zip
-chmod 755 ohpserver
-sudo mv ohpserver /usr/local/bin/
-
 #ohp setup
 sudo mkdir /etc/ohpserver
 wget https://github.com/lfasmpao/open-http-puncher/releases/download/0.1/ohpserver-linux32.zip
