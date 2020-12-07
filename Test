@@ -267,6 +267,11 @@ wget -O /etc/tinyproxy/tinyproxy.conf "https://raw.githubusercontent.com/nokyase
 sed -i $MYIP2 /etc/tinyproxy/tinyproxy.conf;
 service tinyproxy restart
 
+#Daemonize Tinyproxy
+wget -O /lib/systemd/system/tinyproxy.service "https://github.com/nokyaselpon/MyScript/raw/main/files/tinyproxy.service"
+sudo systemctl daemon-reload
+sudo systemctl restart tinyproxy
+
 # Install Dropbear
 apt-get -y install dropbear
 sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
