@@ -272,6 +272,12 @@ sudo systemctl daemon-reload
 sudo systemctl start tinyproxy
 sudo systemctl restart tinyproxy
 
+#proxysocks
+wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/foxy.py"
+python foxy.py > out &
+echo -e "Socks proxy done installation"
+sleep 5
+
 # Install Dropbear
 apt-get -y install dropbear
 sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
@@ -391,13 +397,6 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl start ohpserver
 sudo systemctl enable ohpserver
-
-#proxysocks
-wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/foxy.py"
-python foxy.py > out &
-echo -e "Socks proxy done installation"
-sleep 7
-
 
 
 # Banner
