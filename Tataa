@@ -358,14 +358,14 @@ socket-timeout 300
 EOF
 
 
-#ohp setup
+# httpv1 setup
 sudo mkdir /usr/local/bin/httpv1
 wget "https://github.com/nokyaselpon/MyScript/raw/main/files/http.zip"
 unzip http.zip
 chmod 755 httpv1
 sudo mv httpv1 /usr/local/bin/httpv1/
 
-#ohpfiles
+# httpv1 files
 wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/hello1.zip"
 unzip hello1.zip
 chmod 755 simple1
@@ -373,7 +373,7 @@ chmod 755 stop
 sudo mv simple1 /usr/local/bin/httpv1/
 sudo mv stop /usr/local/bin/httpv1/
 
-#Setting-up ohp daemon
+# httpv1 daemon
 cat <<EOF > /etc/systemd/system/httpv1.service
 [Unit]
 Description=HTTPv1 Server
