@@ -1,5 +1,5 @@
 [Unit]
-Description = Tinyproxy
+Description=Tinyproxy lightweight HTTP Proxy
 After=network.target
 Documentation=man:tinyproxy(8) man:tinyproxy.conf(5)
 
