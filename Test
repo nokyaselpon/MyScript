@@ -264,12 +264,12 @@ service squid restart
 # Install Tinyproxy
 apt-get -y install tinyproxy
 wget -O /etc/tinyproxy/tinyproxy.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.conf"
-sed -i $MYIP2 /etc/tinyproxy/tinyproxy.conf;
 service tinyproxy restart
 
 #Daemonize Tinyproxy
 wget -O /lib/systemd/system/tinyproxy.service "https://github.com/nokyaselpon/MyScript/raw/main/files/tinyproxy.service"
 sudo systemctl daemon-reload
+sudo systemctl start tinyproxy
 sudo systemctl restart tinyproxy
 
 # Install Dropbear
