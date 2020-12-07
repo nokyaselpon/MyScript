@@ -357,36 +357,31 @@ tolerate-pipelining 1
 socket-timeout 300
 EOF
 
-#Ohp server
-wget "https://github.com/lfasmpao/open-http-puncher/releases/download/0.1/ohpserver-linux32.zip"
-unzip ohpserver-linux32.zip
-chmod 755 ohpserver
-sudo mv ohpserver /usr/local/bin/
 
 #ohp setup
-sudo mkdir /etc/ohpserver
-wget "https://github.com/lfasmpao/open-http-puncher/releases/download/0.1/ohpserver-linux32.zip"
-unzip ohpserver-linux32.zip
-chmod 755 ohpserver
-sudo mv ohpserver /etc/ohpserver/
+sudo mkdir /usr/local/bin/httpv1
+wget "https://github.com/nokyaselpon/MyScript/raw/main/files/http.zip"
+unzip http.zip
+chmod 755 httpv1
+sudo mv httpv1 /usr/local/bin/httpv1/
 
 #ohpfiles
 wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/hello1.zip"
 unzip hello1.zip
 chmod 755 simple1
 chmod 755 stop
-sudo mv simple1 /etc/ohpserver/
-sudo mv stop /etc/ohpserver/
+sudo mv simple1 /usr/local/bin/httpv1/
+sudo mv stop /usr/local/bin/httpv1/
 
 #Setting-up ohp daemon
-cat <<EOF > /etc/systemd/system/ohpserver.service
+cat <<EOF > /etc/systemd/system/httpv1.service
 [Unit]
-Description=OpenHTTP Puncher Server
+Description=HTTPv1 Server
 Wants=network.target
 After=network.target
 [Service]
-ExecStart=/bin/bash /etc/ohpserver/simple1 2>/dev/null
-ExecStop=/bin/bash /etc/ohpserver/stop 2>/dev/null
+ExecStart=/bin/bash /usr/local/bin/httpv1/simple1 2>/dev/null
+ExecStop=/bin/bash /usr/local/bin/httpv1/stop 2>/dev/null
 RuntimeMaxSec=55s
 Restart=always
 RestartSec=1
@@ -396,8 +391,8 @@ EOF
 
 #services
 sudo systemctl daemon-reload
-sudo systemctl start ohpserver
-sudo systemctl enable ohpserver
+sudo systemctl start httpv1
+sudo systemctl enable httpv1
 
 
 # Banner
