@@ -98,10 +98,12 @@ ufw allow 8996/tcp
 ufw allow 8996/udp
 ufw allow 8997/tcp
 ufw allow 8997/udp
+ufw allow 6500/tcp
+ufw allow 6500/udp
 ufw allow 8998/tcp
 ufw allow 8998/udp
-ufw allow 8999/tcp
-ufw allow 8999/udp
+ufw allow 7575/tcp
+ufw allow 7575/udp
 ufw allow 32754/tcp
 ufw allow 32754/udp
 sed -i 's|DEFAULT_INPUT_POLICY="DROP"|DEFAULT_INPUT_POLICY="ACCEPT"|' /etc/default/ufw
@@ -239,8 +241,12 @@ Iptables -A INPUT -p tcp --dport 8997  -m state --state NEW -j ACCEPT
 Iptables -A INPUT -p udp --dport 8997  -m state --state NEW -j ACCEPT
 Iptables -A INPUT -p tcp --dport 8998  -m state --state NEW -j ACCEPT
 Iptables -A INPUT -p udp --dport 8998  -m state --state NEW -j ACCEPT
-Iptables -A INPUT -p tcp --dport 8999  -m state --state NEW -j ACCEPT
-Iptables -A INPUT -p udp --dport 8999  -m state --state NEW -j ACCEPT
+Iptables -A INPUT -p tcp --dport 8995  -m state --state NEW -j ACCEPT
+Iptables -A INPUT -p udp --dport 8995  -m state --state NEW -j ACCEPT
+Iptables -A INPUT -p tcp --dport 6500  -m state --state NEW -j ACCEPT
+Iptables -A INPUT -p udp --dport 6500  -m state --state NEW -j ACCEPT
+Iptables -A INPUT -p tcp --dport 7575  -m state --state NEW -j ACCEPT
+Iptables -A INPUT -p udp --dport 7575  -m state --state NEW -j ACCEPT
 iptables-save
 cd
 
@@ -265,7 +271,7 @@ sudo systemctl restart tinyproxy
 # Install Dropbear
 apt-get -y install dropbear
 sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
-sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=442/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_PORT=442/DROPBEAR_PORT=888/g' /etc/default/dropbear
 sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 777 -p 666"/g' /etc/default/dropbear
 echo "/bin/false" >> /etc/shells
 service ssh restart
