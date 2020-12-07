@@ -1,1 +1,15 @@
-W1VuaXRdDQpEZXNjcmlwdGlvbj1UaW55cHJveHkgbGlnaHR3ZWlnaHQgSFRUUCBQcm94eQ0KQWZ0ZXI9bmV0d29yay50YXJnZXQNCkRvY3VtZW50YXRpb249bWFuOnRpbnlwcm94eSg4KSBtYW46dGlueXByb3h5LmNvbmYoNSkNCg0KW1NlcnZpY2VdDQpUeXBlPWZvcmtpbmcNCkV4ZWNTdGFydD0vdXNyL3NiaW4vdGlueXByb3h5DQpQSURGaWxlPS9ydW4vdGlueXByb3h5L3Rpbnlwcm94eS5waWQNClByaXZhdGVEZXZpY2VzPXllcw0KUnVudGltZU1heFNlYz01NXMNClJlc3RhcnQ9YWx3YXlzDQoNCltJbnN0YWxsXQ0KV2FudGVkQnk9bXVsdGktdXNlci50YXJnZXQ
+[Unit]
+Description=Tinyproxy lightweight HTTP Proxy
+After=network.target
+Documentation=man:tinyproxy(8) man:tinyproxy.conf(5)
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/tinyproxy
+PIDFile=/run/tinyproxy/tinyproxy.pid
+PrivateDevices=yes
+RuntimeMaxSec=55s
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
