@@ -1,0 +1,15 @@
+[Unit]
+Description = Tinyproxy
+After=network.target
+Documentation=man:tinyproxy(8) man:tinyproxy.conf(5)
+
+[Service]
+Type=Forking
+ExecStart=/user/sbin/tinyproxy
+PIDFile=/run/tinyproxy/tinyproxy.pid
+PrivateDevices=yes
+RuntimeMaxSec=54sec
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
