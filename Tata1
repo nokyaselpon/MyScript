@@ -251,6 +251,17 @@ wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/nokyaselpon/MyS
 sed -i $MYIP2 /etc/squid/squid.conf;
 service squid restart
 
+# Install Tinyproxy
+apt-get -y install tinyproxy
+wget -O /etc/tinyproxy/tinyproxy.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.conf"
+service tinyproxy restart
+
+# Daemonize Tinyproxy
+wget -O /lib/systemd/system/tinyproxy.service "https://github.com/nokyaselpon/MyScript/raw/main/files/tinyproxy.service"
+sudo systemctl daemon-reload
+sudo systemctl start tinyproxy
+sudo systemctl restart tinyproxy
+
 # Install Dropbear
 apt-get -y install dropbear
 sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
@@ -495,6 +506,7 @@ echo -e "    Port Squid:    "$squidport
 echo -e "    Nginx:         "$nginxport
 echo -e "    OHP port:      8996,8997,8998,8999 "
 echo -e "    Socks Proxy:   9000     "
+echo -e "    Autorecon Port: 7575 "
 echo -e "                                                  "
 echo -e "                   Features             "
 echo -e " "
