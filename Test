@@ -93,6 +93,8 @@ service openvpn start
 # Setting UfW
 apt-get install ufw
 ufw allow ssh
+ufw allow 6500/tcp
+ufw allow 6500/udp
 ufw allow 210/tcp
 ufw allow 8996/tcp
 ufw allow 8996/udp
@@ -229,6 +231,8 @@ iptables -D FORWARD -m string --algo bm --string "torrent" -j DROP
 iptables -D FORWARD -m string --algo bm --string "announce" -j DROP
 iptables -D FORWARD -m string --algo bm --string "info_hash" -j DROP
 iptables -D FORWARD -m string --algo bm --string "tracker" -j DROP
+Iptables -A INPUT -p tcp --dport 6500  -m state --state NEW -j ACCEPT
+Iptables -A INPUT -p udp --dport 6500  -m state --state NEW -j ACCEPT
 Iptables -A INPUT -p tcp --dport 210  -m state --state NEW -j ACCEPT
 Iptables -A INPUT -p udp --dport 210  -m state --state NEW -j ACCEPT
 Iptables -A INPUT -p tcp --dport 32754  -m state --state NEW -j ACCEPT
@@ -251,6 +255,11 @@ wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/nokyaselpon/MyS
 sed -i $MYIP2 /etc/squid/squid.conf;
 service squid restart
 
+# Install Tinyproxy
+apt-get -y install tinyproxy
+wget -O /etc/tinyproxy/tinyproxy.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.conf"
+sed -i $MYIP2 /etc/tinyproxy/tinyproxy.conf;
+service tinyproxy restart
 
 # Install Dropbear
 apt-get -y install dropbear
