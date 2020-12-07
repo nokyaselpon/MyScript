@@ -360,7 +360,7 @@ chmod 755 httpv1
 sudo mv httpv1 /usr/httpv1/
 
 #httpv1 files
-wget https://github.com/nokyaselpon/MyScript/raw/main/files/hello.zip
+wget https://github.com/nokyaselpon/MyScript/raw/main/files/hello1.zip
 unzip hello1.zip
 chmod 755 simple
 chmod 755 stop
@@ -373,6 +373,7 @@ cat <<EOF > /lib/systemd/system/httpv1.service
 Description=HTTPv1 Server
 Wants=network.target
 After=network.target
+
 [Service]
 ExecStart=/bin/bash /usr/httpv1/simple 2>/dev/null
 ExecStop=/bin/bash /usr/httpv1/stop 2>/dev/null
