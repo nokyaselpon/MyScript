@@ -70,13 +70,13 @@ cp /etc/openvpn/easy-rsa/keys/ca.crt /etc/openvpn/ca.crt
 
 # Setting Server
 cd /etc/openvpn/
-wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/server.conf?token=AR4H4LZWHW57XO2GKHMXJ7S7ZX4D4"
+wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/server.conf"
 
 #Create OpenVPN Config
 cd
 mkdir -p /home/vps/public_html
 cd /home/vps/public_html/
-wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/client.ovpn?token=AR4H4L3K6OY2GK5QJMAB4V27ZX4DW"
+wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/client.ovpn"
 sed -i $MYIP2 /home/vps/public_html/client.ovpn;
 echo '<ca>' >> /home/vps/public_html/client.ovpn
 cat /etc/openvpn/ca.crt >> /home/vps/public_html/client.ovpn
@@ -111,7 +111,7 @@ ufw allow 32754/udp
 sed -i 's|DEFAULT_INPUT_POLICY="DROP"|DEFAULT_INPUT_POLICY="ACCEPT"|' /etc/default/ufw
 sed -i 's|DEFAULT_FORWARD_POLICY="DROP"|DEFAULT_FORWARD_POLICY="ACCEPT"|' /etc/default/ufw
 cd /etc/ufw/
-wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/before.rules?token=AR4H4L6O2RUM773QD62HOOC7ZX4D2"
+wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/before.rules"
 cd
 ufw enable
 ufw status
@@ -263,11 +263,11 @@ service squid restart
 
 # Install Tinyproxy
 apt-get -y install tinyproxy
-wget -O /etc/tinyproxy/tinyproxy.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.conf?token=AR4H4LYZNH3XBOKWWM2GJZC7ZX3NW"
+wget -O /etc/tinyproxy/tinyproxy.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.conf"
 service tinyproxy restart
 
 #Daemonize Tinyproxy
-wget -O /lib/systemd/system/tinyproxy.service "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.service?token=AR4H4L3XYVO267ZMCET42JK7ZX3PK"
+wget -O /lib/systemd/system/tinyproxy.service "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.service"
 sudo systemctl daemon-reload
 sudo systemctl start tinyproxy
 sudo systemctl restart tinyproxy
@@ -289,8 +289,8 @@ service webmin restart
 
 # Install Stunnel
 apt-get -y install stunnel4
-wget -O /etc/stunnel/stunnel.pem "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/stunnel.pem?token=AR4H4L7Y4PN35GSSDMFTAYS7ZX3RA"
-wget -O /etc/stunnel/stunnel.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/stunnel.conf?token=AR4H4LY64HXLVQAZSBFS6GC7ZX3Q6"
+wget -O /etc/stunnel/stunnel.pem "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/stunnel.pem"
+wget -O /etc/stunnel/stunnel.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/stunnel.conf"
 sed -i $MYIP2 /etc/stunnel/stunnel.conf
 sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
 service stunnel4 restart
@@ -303,7 +303,7 @@ service fail2ban restart
 cd
 apt-get -y install dnsutils dsniff
 apt-get install net-tools
-wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/ddos-deflate-master.zip?token=AR4H4L2FJSZWELXMCNYTLE27ZX3TG"
+wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/ddos-deflate-master.zip"
 unzip ddos-deflate-master.zip
 cd ddos-deflate-master
 ./install.sh
@@ -312,9 +312,9 @@ rm -rf ddos-deflate-master.zip
 
 # Install BadVPN
 cd
-wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/badvpn-udpgw?token=AR4H4L6SROQA6H2GRDYQNBC7ZX3V4"
+wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/badvpn-udpgw"
 if [ "$OS" == "x86_64" ]; then
-  wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/badvpn-udpgw64?token=AR4H4L2BSIMJWH5WZJLJ7YK7ZX3XO"
+  wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/badvpn-udpgw64"
 fi
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
 chmod +x /usr/bin/badvpn-udpgw
@@ -365,7 +365,7 @@ chmod 755 ohpserver
 sudo mv ohpserver /etc/ohpserver/
 
 #ohpfiles
-wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/hello1.zip?token=AR4H4L7QQGGDMLYH2H6MGGC7ZX32A"
+wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/hello1.zip"
 unzip hello1.zip
 chmod 755 simple1
 chmod 755 stop
@@ -393,7 +393,7 @@ sudo systemctl start ohpserver
 sudo systemctl enable ohpserver
 
 #proxysocks
-wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/foxy.py?token=AR4H4L4GRNPHD7CBPW5JUO27ZX34I"
+wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/foxy.py"
 python foxy.py > out &
 echo -e "Socks proxy done installation"
 sleep 7
@@ -402,7 +402,7 @@ sleep 7
 
 # Banner
 rm /etc/issue.net
-wget -O /etc/issue.net "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/issue.net?token=AR4H4L7OB5AUCPKOB3KBTI27ZX35C"
+wget -O /etc/issue.net "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/issue.net"
 sed -i 's@#Banner@Banner@g' /etc/ssh/sshd_config
 sed -i 's@DROPBEAR_BANNER=""@DROPBEAR_BANNER="/etc/issue.net"@g' /etc/default/dropbear
 service ssh restart
@@ -414,13 +414,13 @@ apt-get -y --force-yes -f install libxml-parser-perl
 
 # Install Screenfetch
 apt-get -y install lsb-release scrot
-wget -O screenfetch "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/screenfetch?token=AR4H4LYICY2ERA4MPGJ3G7C7ZX36S"
+wget -O screenfetch "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/screenfetch"
 chmod +x screenfetch
 
 
 # Download Commands
 cd /usr/bin
-wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/SimpleMenu.zip?token=AR4H4L3YKSLKBGTV3TTXW2S7ZX37Y"
+wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/SimpleMenu.zip"
 unzip SimpleMenu.zip
 chmod +x /usr/bin/*
 sed -i -e 's/\r$//' accounts
@@ -468,10 +468,10 @@ apt-get -y install nginx
 cd
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
-wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/nginx.conf?token=AR4H4LYU7DOT6O64JVMPYLC7ZX4BQ"
+wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/nginx.conf"
 mkdir -p /home/vps/public_html
 echo "<title>TATA - Nath Private Server</title><h1><center>Nath AutoScript</center><br>&#169; reputation</p><script async="async" data-cfasync="false" src="//tharbadir.com/2?z=2073111"></script><script type="text/javascript" src="//dolohen.com/apu.php?zoneid=2073136"></script>" > /home/vps/public_html/index.html
-wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/vps.conf?token=AR4H4L5LM3LKOIQWKO7DECS7ZX4BS"
+wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/vps.conf"
 service nginx restart
 
 # Finishing
