@@ -518,5 +518,8 @@ echo -e "==================================================="
 echo -e "               Installation finished!             "
 echo -e " "
 read -n1 -r -p "   Type "menu" for the list of commands      "
-echo -e " "
+sleep 5
+echo -e "System reboots in 3 sec"
+sleep 5
+reboot
 cd
