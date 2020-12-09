@@ -94,6 +94,7 @@ service openvpn start
 apt-get install ufw
 ufw allow ssh
 ufw allow 210/tcp
+ufw allow 210/udp
 ufw allow 8996/tcp
 ufw allow 8996/udp
 ufw allow 8997/tcp
