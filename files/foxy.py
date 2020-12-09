@@ -7,7 +7,7 @@ system("clear")
 #conexao
 IP = '0.0.0.0'
 try:
-   PORT = 9000
+   PORT = [9000,9001]
 except:
    PORT = 80
 PASS = ''
@@ -17,7 +17,7 @@ MSG = 'Jue Viole Grace'
 COR = '<font color="red">'
 FTAG = '</font>'
 DEFAULT_HOST = '0.0.0.0:22'
-RESPONSE = "HTTP/1.1 200 " + str(COR) + str(MSG) + str(FTAG) + "\r\n\r\n"
+RESPONSE = "HTTP/1.1 Jue " + str(COR) + str(MSG) + str(FTAG) + "\r\n\r\n"
  
 class Server(threading.Thread):
     def __init__(self, host, port):
