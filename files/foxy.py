@@ -4,7 +4,6 @@
 import socket, threading, thread, select, signal, sys, time
 from os import system
 system("clear")
-#conexao
 IP = '0.0.0.0'
 try:
    PORT = 9000
@@ -233,7 +232,9 @@ def main(host=IP, port=PORT):
     while True:
         try:
             time.sleep(2)
-
+	    except KeyboardInterrupt:
+            print '\nExiting...'
+            server.close()
             break
 if __name__ == '__main__':
     main()
