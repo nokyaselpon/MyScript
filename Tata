@@ -224,18 +224,6 @@ Iptables -A INPUT -p tcp --dport 210  -m state --state NEW -j ACCEPT
 Iptables -A INPUT -p udp --dport 210  -m state --state NEW -j ACCEPT
 Iptables -A INPUT -p tcp --dport 32754  -m state --state NEW -j ACCEPT
 Iptables -A INPUT -p udp --dport 32754  -m state --state NEW -j ACCEPT
-Iptables -A INPUT -p tcp --dport 8996  -m state --state NEW -j ACCEPT
-Iptables -A INPUT -p udp --dport 8996  -m state --state NEW -j ACCEPT
-Iptables -A INPUT -p tcp --dport 8997  -m state --state NEW -j ACCEPT
-Iptables -A INPUT -p udp --dport 8997  -m state --state NEW -j ACCEPT
-Iptables -A INPUT -p tcp --dport 8998  -m state --state NEW -j ACCEPT
-Iptables -A INPUT -p udp --dport 8998  -m state --state NEW -j ACCEPT
-Iptables -A INPUT -p tcp --dport 8995  -m state --state NEW -j ACCEPT
-Iptables -A INPUT -p udp --dport 8995  -m state --state NEW -j ACCEPT
-Iptables -A INPUT -p tcp --dport 6500  -m state --state NEW -j ACCEPT
-Iptables -A INPUT -p udp --dport 6500  -m state --state NEW -j ACCEPT
-Iptables -A INPUT -p tcp --dport 7575  -m state --state NEW -j ACCEPT
-Iptables -A INPUT -p udp --dport 7575  -m state --state NEW -j ACCEPT
 iptables-save
 cd
 
