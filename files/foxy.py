@@ -7,7 +7,7 @@ system("clear")
 #conexao
 IP = '0.0.0.0'
 try:
-   PORT = [9000,9001]
+   PORT = 9000
 except:
    PORT = 80
 PASS = ''
