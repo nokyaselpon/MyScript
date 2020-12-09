@@ -48,6 +48,7 @@ openssl dhparam -out /etc/openvpn/dh2048.pem 2048
 
 # Create PKI
 cd /etc/openvpn/easy-rsa
+cp openssl-1.0.0.cnf openssl.cnf
 . ./vars
 ./clean-all
 export EASY_RSA="${EASY_RSA:-.}"
@@ -60,7 +61,6 @@ export EASY_RSA="${EASY_RSA:-.}"
 # Setting KEY CN
 export EASY_RSA="${EASY_RSA:-.}"
 "$EASY_RSA/pkitool" client
-
 
 # cp /etc/openvpn/easy-rsa/keys/{server.crt,server.key,ca.crt} /etc/openvpn
 cd
