@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # encoding: utf-8
-#Nath
+# NATH
 import socket, threading, thread, select, signal, sys, time
 from os import system
 system("clear")
@@ -171,9 +171,9 @@ class ConnectionHandler(threading.Thread):
             host = host[:i]
         else:
             if self.method=='CONNECT':
-                port = 443
+                port = 666
             else:
-                port = 22
+                port = 442
 
         (soc_family, soc_type, proto, _, address) = socket.getaddrinfo(host, port)[0]
 
@@ -225,15 +225,15 @@ class ConnectionHandler(threading.Thread):
 
 
 def main(host=IP, port=PORT):
-    print ('Python Socks installation done!')
-    print ('Server Port: 9000')
+    print ('Python Socks proxy')
+    print ('Port : 9000 ')
     server = Server(IP, PORT)
     server.start()
     while True:
         try:
             time.sleep(2)
-	    except KeyboardInterrupt:
-            print '\nExiting...'
+        except KeyboardInterrupt:
+            print '\nParando...'
             server.close()
             break
 if __name__ == '__main__':
