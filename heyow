@@ -1,6 +1,9 @@
 #!/bin/bash
 # Nath
 # Initializing Var
+
+# Install wget and curl
+yum update;yum -y install wget curl;
 Privoxy="32754";
 MYIP=$(wget -qO- ipv4.icanhazip.com);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
@@ -11,9 +14,6 @@ cd
 # Disable IPV6
 echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 sed -i '$ i\echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6' /etc/rc.local
-
-# Install wget and curl
-yum update;yum -y install wget curl;
 
 # Local Time Manila
 ln -fs /usr/share/zoneinfo/Asia/Manila /etc/localtime
