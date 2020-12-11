@@ -8,8 +8,6 @@ Type=forking
 ExecStart=/usr/sbin/tinyproxy
 PIDFile=/run/tinyproxy/tinyproxy.pid
 PrivateDevices=yes
-RuntimeMaxSec=57s
-Restart=always
 
 [Install]
 WantedBy=multi-user.target
