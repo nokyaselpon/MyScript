@@ -179,12 +179,10 @@ service squid restart
 # Install Tinyproxy
 apt-get -y install tinyproxy
 wget -O /etc/tinyproxy/tinyproxy.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.conf"
-service tinyproxy restart
 
 #Daemonize Tinyproxy
 wget -O /lib/systemd/system/tinyproxy.service "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.service"
 sudo systemctl daemon-reload
-sudo systemctl start tinyproxy
 sudo systemctl restart tinyproxy
 
 # Install Dropbear
@@ -246,7 +244,6 @@ After=network.target
 
 [Service]
 ExecStart=/usr/httpv1/httpv1 -port 7575 -proxy 127.0.0.1:6500 -tunnel 127.0.0.1:456
-RuntimeMaxSec=55s
 Restart=always
 RestartSec=1
 [Install]
