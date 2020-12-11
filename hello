@@ -1,0 +1,351 @@
+#!/bin/bash
+# Nath
+# Initializing Var
+export DEBIAN_FRONTEND=noninteractive
+OS=`uname -m`;
+MYIP=$(wget -qO- ipv4.icanhazip.com);
+MYIP2="s/xxxxxxxxx/$MYIP/g";
+
+# Root Directory
+cd
+
+# Disable IPV6
+echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
+sed -i '$ i\echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6' > /etc/rc.local
+
+# Install wget and curl
+apt-get update;apt-get -y install wget curl;
+
+# Local Time Manila
+ln -fs /usr/share/zoneinfo/Asia/Manila /etc/localtime
+
+# Local Configuration
+sed -i 's/AcceptEnv/#AcceptEnv/g' /etc/ssh/sshd_config
+service ssh restart
+
+# Update
+apt-get update
+
+# Install Essential Packages
+apt-get -y install nano iptables dnsutils screen whois ngrep unzip
+
+# Setting UfW
+apt-get install ufw
+ufw allow ssh
+ufw allow 7575/tcp
+ufw allow 32574/tcp
+ufw allow 7676/tcp
+ufw allow 6500/tcp
+sed -i 's|DEFAULT_INPUT_POLICY="DROP"|DEFAULT_INPUT_POLICY="ACCEPT"|' /etc/default/ufw
+sed -i 's|DEFAULT_FORWARD_POLICY="DROP"|DEFAULT_FORWARD_POLICY="ACCEPT"|' /etc/default/ufw
+cd /etc/ufw/
+wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/before.rules"
+cd
+ufw enable
+ufw status
+
+# set ipv4 forward
+echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
+sed -i 's|#net.ipv4.ip_forward=1|net.ipv4.ip_forward=1|' /etc/sysctl.conf
+
+# Install iptables and block torrent
+cd
+iptables -A INPUT -i eth0 -m state --state
+iptables -A INPUT -i tun+ -j ACCEPT
+iptables -A FORWARD -i tun+ -j ACCEPT
+iptables -A FORWARD -i tun+ -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -i eth0 -o tun+ -m state
+iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
+iptables -A OUTPUT -o tun+ -j ACCEPT
+iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
+iptables -A OUTPUT -p icmp --icmp-type echo-request -j DROP
+iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
+iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP
+iptables -A INPUT -f -j DROP
+iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
+iptables -A INPUT -m string --string "BitTorrent" --algo bm --to 65535 -j DROP
+iptables -A INPUT -m string --string "BitTorrent protocol" --algo bm --to 65535 -j DROP
+iptables -A INPUT -m string --string "peer_id=" --algo bm --to 65535 -j DROP
+iptables -A INPUT -m string --string ".torrent" --algo bm --to 65535 -j DROP
+iptables -A INPUT -m string --string "announce.php?passkey=" --algo bm --to 65535 -j DROP
+iptables -A INPUT -m string --string "torrent" --algo bm --to 65535 -j DROP
+iptables -A INPUT -m string --string "announce" --algo bm --to 65535 -j DROP
+iptables -A INPUT -m string --string "info_hash" --algo bm --to 65535 -j DROP
+iptables -A INPUT -m string --string "peer_id" --algo kmp --to 65535 -j DROP
+iptables -A INPUT -m string --string "BitTorrent" --algo kmp --to 65535 -j DROP
+iptables -A INPUT -m string --string "BitTorrent protocol" --algo kmp --to 65535 -j DROP
+iptables -A INPUT -m string --string "bittorrent-announce" --algo kmp --to 65535 -j DROP
+iptables -A INPUT -m string --string "announce.php?passkey=" --algo kmp --to 65535 -j DROP
+iptables -A INPUT -m string --string "find_node" --algo kmp --to 65535 -j DROP
+iptables -A INPUT -m string --string "info_hash" --algo kmp --to 65535 -j DROP
+iptables -A INPUT -m string --string "get_peers" --algo kmp --to 65535 -j DROP
+iptables -A INPUT -m string --string "announce" --algo kmp --to 65535 -j DROP
+iptables -A INPUT -m string --string "announce_peers" --algo kmp --to 65535 -j DROP
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+iptables -I OUTPUT -p tcp --dport 1723 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 6881:6889 -j DROP
+iptables -A FORWARD -m string --algo bm --string "BitTorrent" -j DROP
+iptables -A FORWARD -p tcp --dport 6881:6889 -j DROP
+iptables -D FORWARD -m string --algo bm --string "BitTorrent" -j LOGDROP
+iptables -D FORWARD -m string --algo bm --string "BitTorrent protocol" -j LOGDROP
+iptables -D FORWARD -m string --algo bm --string "peer_id=" -j LOGDROP
+iptables -D FORWARD -m string --algo bm --string ".torrent" -j LOGDROP
+iptables -D FORWARD -m string --algo bm --string "announce.php?passkey=" -j LOGDROP
+iptables -D FORWARD -m string --algo bm --string "torrent" -j LOGDROP
+iptables -D FORWARD -m string --algo bm --string "announce" -j LOGDROP
+iptables -D FORWARD -m string --algo bm --string "info_hash" -j LOGDROP
+iptables -A FORWARD -m string --string "get_peers" --algo bm -j DROP
+iptables -A FORWARD -m string --string "announce_peer" --algo bm -j LOGDROP
+iptables -A FORWARD -m string --string "find_node" --algo bm -j LOGDROP
+iptables -A FORWARD -p udp -m string --algo bm --string "BitTorrent" -j DROP
+iptables -A FORWARD -p udp -m string --algo bm --string "BitTorrent protocol" -j DROP
+iptables -A FORWARD -p udp -m string --algo bm --string "peer_id=" -j DROP
+iptables -A FORWARD -p udp -m string --algo bm --string ".torrent" -j DROP
+iptables -A FORWARD -p udp -m string --algo bm --string "announce.php?passkey=" -j DROP
+iptables -A FORWARD -p udp -m string --algo bm --string "torrent" -j DROP 
+iptables -A FORWARD -p udp -m string --algo bm --string "announce" -j DROP
+iptables -A FORWARD -p udp -m string --algo bm --string "info_hash" -j DROP 
+iptables -A FORWARD -p udp -m string --algo bm --string "tracker" -j DROP 
+iptables -A INPUT -p udp -m string --algo bm --string "BitTorrent" -j DROP 
+iptables -A INPUT -p udp -m string --algo bm --string "BitTorrent protocol" -j DROP iptables -A INPUT -p udp -m string --algo bm --string "peer_id=" -j DROP 
+iptables -A INPUT -p udp -m string --algo bm --string ".torrent" -j DROP 
+iptables -A INPUT -p udp -m string --algo bm --string "announce.php?passkey=" -j DROP iptables -A INPUT -p udp -m string --algo bm --string "torrent" -j DROP 
+iptables -A INPUT -p udp -m string --algo bm --string "announce" -j DROP 
+iptables -A INPUT -p udp -m string --algo bm --string "info_hash" -j DROP 
+iptables -A INPUT -p udp -m string --algo bm --string "tracker" -j DROP 
+iptables -I INPUT -p udp -m string --algo bm --string "BitTorrent" -j DROP 
+iptables -I INPUT -p udp -m string --algo bm --string "BitTorrent protocol" -j DROP iptables -I INPUT -p udp -m string --algo bm --string "peer_id=" -j DROP 
+iptables -I INPUT -p udp -m string --algo bm --string ".torrent" -j DROP 
+iptables -I INPUT -p udp -m string --algo bm --string "announce.php?passkey=" -j DROP iptables -I INPUT -p udp -m string --algo bm --string "torrent" -j DROP 
+iptables -I INPUT -p udp -m string --algo bm --string "announce" -j DROP
+iptables -I INPUT -p udp -m string --algo bm --string "info_hash" -j DROP 
+iptables -I INPUT -p udp -m string --algo bm --string "tracker" -j DROP 
+iptables -D INPUT -p udp -m string --algo bm --string "BitTorrent" -j DROP 
+iptables -D INPUT -p udp -m string --algo bm --string "BitTorrent protocol" -j DROP iptables -D INPUT -p udp -m string --algo bm --string "peer_id=" -j DROP 
+iptables -D INPUT -p udp -m string --algo bm --string ".torrent" -j DROP 
+iptables -D INPUT -p udp -m string --algo bm --string "announce.php?passkey=" -j DROP iptables -D INPUT -p udp -m string --algo bm --string "torrent" -j DROP 
+iptables -D INPUT -p udp -m string --algo bm --string "announce" -j DROP 
+iptables -D INPUT -p udp -m string --algo bm --string "info_hash" -j DROP 
+iptables -D INPUT -p udp -m string --algo bm --string "tracker" -j DROP 
+iptables -I OUTPUT -p udp -m string --algo bm --string "BitTorrent" -j DROP 
+iptables -I OUTPUT -p udp -m string --algo bm --string "BitTorrent protocol" -j DROP iptables -I OUTPUT -p udp -m string --algo bm --string "peer_id=" -j DROP 
+iptables -I OUTPUT -p udp -m string --algo bm --string ".torrent" -j DROP 
+iptables -I OUTPUT -p udp -m string --algo bm --string "announce.php?passkey=" -j DROP iptables -I OUTPUT -p udp -m string --algo bm --string "torrent" -j DROP 
+iptables -I OUTPUT -p udp -m string --algo bm --string "announce" -j DROP 
+iptables -I OUTPUT -p udp -m string --algo bm --string "info_hash" -j DROP 
+iptables -I OUTPUT -p udp -m string --algo bm --string "tracker" -j DROP
+iptables -D INPUT -m string --algo bm --string "BitTorrent" -j DROP 
+iptables -D INPUT -m string --algo bm --string "BitTorrent protocol" -j DROP 
+iptables -D INPUT -m string --algo bm --string "peer_id=" -j DROP
+iptables -D INPUT -m string --algo bm --string ".torrent" -j DROP 
+iptables -D INPUT -m string --algo bm --string "announce.php?passkey=" -j DROP 
+iptables -D INPUT -m string --algo bm --string "torrent" -j DROP 
+iptables -D INPUT -m string --algo bm --string "announce" -j DROP
+iptables -D INPUT -m string --algo bm --string "info_hash" -j DROP
+iptables -D INPUT -m string --algo bm --string "tracker" -j DROP 
+iptables -D OUTPUT -m string --algo bm --string "BitTorrent" -j DROP
+iptables -D OUTPUT -m string --algo bm --string "BitTorrent protocol" -j DROP
+iptables -D OUTPUT -m string --algo bm --string "peer_id=" -j DROP
+iptables -D OUTPUT -m string --algo bm --string ".torrent" -j DROP
+iptables -D OUTPUT -m string --algo bm --string "announce.php?passkey=" -j DROP 
+iptables -D OUTPUT -m string --algo bm --string "torrent" -j DROP
+iptables -D OUTPUT -m string --algo bm --string "announce" -j DROP
+iptables -D OUTPUT -m string --algo bm --string "info_hash" -j DROP
+iptables -D OUTPUT -m string --algo bm --string "tracker" -j DROP 
+iptables -D FORWARD -m string --algo bm --string "BitTorrent" -j DROP
+iptables -D FORWARD -m string --algo bm --string "BitTorrent protocol" -j DROP
+iptables -D FORWARD -m string --algo bm --string "peer_id=" -j DROP
+iptables -D FORWARD -m string --algo bm --string ".torrent" -j DROP
+iptables -D FORWARD -m string --algo bm --string "announce.php?passkey=" -j DROP
+iptables -D FORWARD -m string --algo bm --string "torrent" -j DROP
+iptables -D FORWARD -m string --algo bm --string "announce" -j DROP
+iptables -D FORWARD -m string --algo bm --string "info_hash" -j DROP
+iptables -D FORWARD -m string --algo bm --string "tracker" -j DROP
+Iptables -A INPUT -p tcp --dport 210  -m state --state NEW -j ACCEPT
+Iptables -A INPUT -p udp --dport 210  -m state --state NEW -j ACCEPT
+Iptables -A INPUT -p tcp --dport 32754  -m state --state NEW -j ACCEPT
+Iptables -A INPUT -p udp --dport 32754  -m state --state NEW -j ACCEPT
+iptables-save
+cd
+
+# Install Squid3
+cd
+apt-get -y install squid3
+wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/squid.conf"
+sed -i $MYIP2 /etc/squid/squid.conf;
+service squid restart
+
+# Install Tinyproxy
+apt-get -y install tinyproxy
+wget -O /etc/tinyproxy/tinyproxy.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.conf"
+service tinyproxy restart
+
+#Daemonize Tinyproxy
+wget -O /lib/systemd/system/tinyproxy.service "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.service"
+sudo systemctl daemon-reload
+sudo systemctl start tinyproxy
+sudo systemctl restart tinyproxy
+
+# Install Dropbear
+apt-get -y install dropbear
+sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_PORT=442/DROPBEAR_PORT=888/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 456 -p 789"/g' /etc/default/dropbear
+echo "/bin/false" >> /etc/shells
+service ssh restart
+service dropbear restart
+
+# Install Fail2Ban
+apt-get -y install fail2ban;
+service fail2ban restart
+
+# Install DDOS Deflate
+cd
+apt-get -y install dnsutils dsniff
+apt-get install net-tools
+wget "https://github.com/nokyaselpon/MyScript/raw/main/ddos-deflate-master.zip"
+unzip ddos-deflate-master.zip
+cd ddos-deflate-master
+./install.sh
+cd
+rm -rf ddos-deflate-master.zip
+
+# Install BadVPN
+cd
+wget -O /usr/bin/badvpn-udpgw "https://github.com/nokyaselpon/MyScript/raw/main/badvpn-udpgw"
+if [ "$OS" == "x86_64" ]; then
+  wget -O /usr/bin/badvpn-udpgw "https://github.com/nokyaselpon/MyScript/raw/main/badvpn-udpgw64"
+fi
+sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
+chmod +x /usr/bin/badvpn-udpgw
+screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
+
+
+#httpv1 setup
+sudo mkdir /usr/httpv1
+wget https://github.com/nokyaselpon/MyScript/raw/main/files/http.zip
+unzip http.zip
+chmod 755 httpv1
+sudo mv httpv1 /usr/httpv1/
+
+#httpv1 files
+wget https://github.com/nokyaselpon/MyScript/raw/main/files/hello.zip
+unzip hello.zip
+chmod 755 simple
+chmod 755 stop
+sudo mv simple /usr/httpv1/
+sudo mv stop /usr/httpv1/
+
+#Dameon httpv1
+cat <<EOF > /lib/systemd/system/httpv1.service
+[Unit]
+Description=HTTPv1 Server
+Wants=network.target
+After=network.target
+
+[Service]
+ExecStart=/usr/httpv1/httpv1 -port 7575 -proxy 127.0.0.1:6500 -tunnel 127.0.0.1:456
+RuntimeMaxSec=55s
+Restart=always
+RestartSec=1
+[Install]
+WantedBy=multi-user.target
+EOF
+
+#services
+sudo systemctl daemon-reload
+sudo systemctl start httpv1
+sudo systemctl enable httpv1
+
+# Banner
+rm /etc/issue.net
+wget -O /etc/issue.net "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/issue.net"
+sed -i 's@#Banner@Banner@g' /etc/ssh/sshd_config
+sed -i 's@DROPBEAR_BANNER=""@DROPBEAR_BANNER="/etc/issue.net"@g' /etc/default/dropbear
+service ssh restart
+service dropbear restart
+
+# XML Parser
+cd
+apt-get -y --force-yes -f install libxml-parser-perl
+
+# Install Screenfetch
+apt-get -y install lsb-release scrot
+wget -O screenfetch "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/screenfetch"
+chmod +x screenfetch
+
+
+# Download Commands
+cd /usr/bin
+wget https://github.com/nokyaselpon/MyScript/raw/main/SimpleMenu.zip
+unzip SimpleMenu.zip
+chmod +x /usr/bin/*
+sed -i -e 's/\r$//' accounts
+sed -i -e 's/\r$//' clearcache
+sed -i -e 's/\r$//' connections
+sed -i -e 's/\r$//' create
+sed -i -e 's/\r$//' edit_dropbear
+sed -i -e 's/\r$//' edit_openssh
+sed -i -e 's/\r$//' edit_ports
+sed -i -e 's/\r$//' edit_squid3
+sed -i -e 's/\r$//' edit_stunnel4
+sed -i -e 's/\r$//' menu
+sed -i -e 's/\r$//' options
+sed -i -e 's/\r$//' reboot_sys_auto
+sed -i -e 's/\r$//' restart_services
+sed -i -e 's/\r$//' show_ports
+sed -i -e 's/\r$//' user_delete
+sed -i -e 's/\r$//' user_list
+
+
+# Set Permissions
+cd /usr/bin
+chmod +x accounts
+chmod +x clearcache
+chmod +x connections
+chmod +x create
+chmod +x user_list
+chmod +x user_delete
+chmod +x options
+chmod +x restart_services
+chmod +x edit_ports
+chmod +x show_ports
+chmod +x edit_openssh
+chmod +x edit_dropbear
+chmod +x edit_stunnel4
+chmod +x edit_squid3
+chmod +x reboot_sys_auto
+chmod +x menu
+
+# Finishing
+cd
+chown -R www-data:www-data /home/vps/public_html
+service openvpn restart
+service ssh restart
+service dropbear restart
+service squid3 restart
+service webmin restart
+rm -rf ~/.bash_history && history -c
+echo "unset HISTFILE" >> /etc/profile
+
+# grep ports 
+opensshport="$(netstat -ntlp | grep -i ssh | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
+dropbearport="$(netstat -nlpt | grep -i dropbear | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
+stunnel4port="$(netstat -nlpt | grep -i stunnel | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
+openvpnport="$(netstat -nlpt | grep -i openvpn | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
+squidport="$(cat /etc/squid/squid.conf | grep -i http_port | awk '{print $2}')"
+nginxport="$(netstat -nlpt | grep -i nginx| grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
+
+
+sleep 5
+echo -e "||==========================||"
+echo -e "||                          ||"
+echo -e "||     Done installation    ||" 
+echo -e "||                          ||"
+echo -e "||Type menu/accounts/options||"
+echo -e "||                          ||"
+echo -e "||                          ||"
+echo -e "||==========================||"
+sleep 5
+cd
