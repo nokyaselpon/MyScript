@@ -477,8 +477,6 @@ echo -e "    Dropbear:      "$dropbearport
 echo -e "    SSL:           "$stunnel4port
 echo -e "    OpenVPN:        "210
 echo -e "    Port Squid:    "$squidport
-echo -e "    Tinyproxy:     6500"
-echo -e "    Socks Proxy:   9000    "
 echo -e "                                                  "
 echo -e "                   Features             "
 echo -e " "
