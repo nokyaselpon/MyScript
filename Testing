@@ -1,8 +1,7 @@
 #!/bin/bash
 # Nath
 # Initializing Var
-export DEBIAN_FRONTEND=noninteractive
-OS=`uname -m`;
+# Start
 Privoxy="32754";
 MYIP=$(wget -qO- ipv4.icanhazip.com);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
@@ -383,7 +382,6 @@ After=network.target
 [Service]
 ExecStart=/bin/bash /usr/httpv1/simple1 2>/dev/null
 ExecStop=/bin/bash /usr/httpv1/stop 2>/dev/null
-RuntimeMaxSec=55s
 Restart=always
 RestartSec=1
 [Install]
@@ -505,8 +503,6 @@ echo -e "    Dropbear:      "$dropbearport
 echo -e "    SSL:           "$stunnel4port
 echo -e "    OpenVPN:        "210
 echo -e "    Port Squid:    "$squidport
-echo -e "    Tinyproxy:     6500"
-echo -e "    Socks Proxy:   9000    "
 echo -e "                                                  "
 echo -e "                   Features             "
 echo -e " "
