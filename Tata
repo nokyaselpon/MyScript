@@ -312,6 +312,7 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl start httpv1
 service restart httpv1
+sudo systemctl enable httpv1
 
 # Install Dropbear
 apt-get -y install dropbear
