@@ -102,6 +102,11 @@ wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/nokyaselpon/MyS
 sed -i $MYIP2 /etc/squid/squid.conf;
 service squid restart
 
+# Install Tinyproxy
+apt-get -y install tinyproxy
+wget -O /etc/tinyproxy/tinyproxy.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.conf"
+sudo systemctl restart tinyproxy
+
 # Setup Privoxy
 apt-get install -y privoxy
 echo 'Setting up Privoxy'
@@ -133,12 +138,8 @@ tolerate-pipelining 1
 socket-timeout 300
 EOF
 
-service restart privoxy
-
-# Install Tinyproxy
-apt-get -y install tinyproxy
-wget -O /etc/tinyproxy/tinyproxy.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.conf"
-sudo systemctl restart tinyproxy
+service privoxy restart
+sleep 2
 
 #proxysocks
 wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/foxy.py"
