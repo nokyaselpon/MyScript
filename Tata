@@ -273,10 +273,6 @@ systemctl status privoxy
 # Install Tinyproxy
 apt-get -y install tinyproxy
 wget -O /etc/tinyproxy/tinyproxy.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.conf"
-
-#Daemonize Tinyproxy
-wget -O /lib/systemd/system/tinyproxy.service "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.service"
-sudo systemctl daemon-reload
 sudo systemctl restart tinyproxy
 
 #proxysocks
@@ -475,7 +471,7 @@ echo -e "==================================================="
 echo -e "                                                   "
 echo -e "             Nath Debian AutoScript          "
 echo -e "                                                 "
-echo -e "                   Ports                      "
+echo -e "                    Ports                      "
 echo -e "                                                  "
 echo -e "    OpenSSH:       "$opensshport
 echo -e "    Dropbear:      "$dropbearport
@@ -483,19 +479,13 @@ echo -e "    SSL:           "$stunnel4port
 echo -e "    OpenVPN:        "210
 echo -e "    Port Squid:    "$squidport
 echo -e "                                                  "
-echo -e "                   Features             "
 echo -e " "
 echo -e "    Commands       :   menu /accounts /options "
-echo -e "    Webmin         :   http://$MYIP:10000/        "
 echo -e "    OVPN config    :   http://$MYIP/client.ovpn  "
-echo -e "    Anti-Torrent   :   [ON]                      "
-echo -e "    Fail2Ban       :   [ON]                       "
-echo -e "    DDOS Deflate   :   [ON]                       "
 echo -e "                                                  "
 echo -e "==================================================="
 echo -e "               Installation finished!             "
 echo -e " "
-read -n1 -r -p "   Type "menu" for the list of commands      "
-echo -e "Installation Done!"
-sleep 5
+sleep 3
+echo -e "                Installation Done!"
 cd
