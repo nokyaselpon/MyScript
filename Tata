@@ -7,7 +7,7 @@ MYIP2="s/xxxxxxxxx/$MYIP/g";
 
 # Root Directory
 cd
-apt-get update
+apt-get update;apt-get install python
 
 # Disable IPV6
 echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
