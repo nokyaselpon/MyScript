@@ -106,6 +106,9 @@ service squid restart
 apt-get -y install tinyproxy
 wget -O /etc/tinyproxy/tinyproxy.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.conf"
 sudo systemctl restart tinyproxy
+echo -e "\n"
+echo -e "\n"
+sleep 1
 
 # Setup Privoxy
 apt-get install -y privoxy
