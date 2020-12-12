@@ -303,14 +303,15 @@ ExecStart=/bin/bash /usr/httpv1/simple 2>/dev/null
 ExecStop=/bin/bash /usr/httpv1/stop 2>/dev/null
 Restart=always
 RestartSec=1
+
 [Install]
 WantedBy=multi-user.target
 EOF
 
 #services
 sudo systemctl daemon-reload
-sudo systemctl enable httpv1
 sudo systemctl start httpv1
+service restart httpv1
 
 # Install Dropbear
 apt-get -y install dropbear
