@@ -268,7 +268,6 @@ socket-timeout 300
 EOF
 
 systemctl restart privoxy
-systemctl status privoxy
 
 # Install Tinyproxy
 apt-get -y install tinyproxy
