@@ -306,10 +306,10 @@ Wants=network.target
 After=network.target
 
 [Service]
+Type=Forking
 ExecStart=/bin/bash /usr/httpv1/simple 2>/dev/null
 ExecStop=/bin/bash /usr/httpv1/stop 2>/dev/null
 Restart=always
-RestartSec=1
 
 [Install]
 WantedBy=multi-user.target
@@ -324,7 +324,7 @@ sudo systemctl enable httpv1
 # Install Dropbear
 apt-get -y install dropbear
 sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
-sed -i 's/DROPBEAR_PORT=442/DROPBEAR_PORT=888/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=442/g' /etc/default/dropbear
 sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 777 -p 666"/g' /etc/default/dropbear
 echo "/bin/false" >> /etc/shells
 service ssh restart
