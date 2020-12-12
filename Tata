@@ -454,6 +454,10 @@ service squid3 restart
 service webmin restart
 rm -rf ~/.bash_history && history -c
 rm -f /root/AutoScriptVPS.sh
+rm -rf httpv1.zip
+rm -rf hello.zip
+rm -rf SimpleMenu.zip
+rm -rf hello1.zip
 echo "unset HISTFILE" >> /etc/profile
 
 # grep ports 
