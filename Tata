@@ -111,9 +111,9 @@ sleep 1
 apt-get install -y privoxy
 echo 'Setting up Privoxy'
 wget -O /etc/privoxy/config "https://github.com/nokyaselpon/MyScript/raw/main/files/config"
-sleep 1
+sed -i $MYIP2 /etc/squid/squid.conf;
 service privoxy restart
-sleep 2
+sleep 1
 echo -e "\n"
 echo -e "\n"
 
