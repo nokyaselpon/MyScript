@@ -105,8 +105,6 @@ service squid restart
 apt-get -y install tinyproxy
 wget -O /etc/tinyproxy/tinyproxy.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.conf"
 sudo systemctl restart tinyproxy
-echo -e "\n"
-echo -e "\n"
 sleep 1
 
 # Setup Privoxy
@@ -114,9 +112,10 @@ apt-get install -y privoxy
 echo 'Setting up Privoxy'
 wget -O /etc/privoxy/config "https://github.com/nokyaselpon/MyScript/raw/main/files/config"
 sleep 1
-
 service privoxy restart
 sleep 2
+echo -e "\n"
+echo -e "\n"
 
 #proxysocks
 wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/foxy.py"
