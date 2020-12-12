@@ -11,8 +11,8 @@ cd
 # Disable IPV6
 echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 
-# Install wget and curl
-apt-get update;apt-get -y install wget curl;
+# Install wget and curl, upgrade
+apt-get update;apt-get -y install wget curl;apt-get upgrade -y;
 
 # Local Time Manila
 ln -fs /usr/share/zoneinfo/Asia/Manila /etc/localtime
