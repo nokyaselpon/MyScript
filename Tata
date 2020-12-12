@@ -105,7 +105,6 @@ service squid restart
 # Setup Privoxy
 apt-get install -y privoxy
 echo 'Setting up Privoxy'
-mkdir /etc/privoxy/
 sleep 2
 cat <<EOF > /etc/privoxy/config
 user-manual /usr/share/doc/privoxy/user-manual
@@ -134,7 +133,7 @@ tolerate-pipelining 1
 socket-timeout 300
 EOF
 
-systemctl restart privoxy
+service restart privoxy
 
 # Install Tinyproxy
 apt-get -y install tinyproxy
