@@ -283,62 +283,6 @@ wget -O /etc/crontab "https://github.com/nokyaselpon/MyScript/raw/main/files/cro
 service crontab restart
 sleep 2
 
-# Install Dropbear
-apt-get -y install dropbear
-sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
-sed -i 's/DROPBEAR_PORT=442/DROPBEAR_PORT=888/g' /etc/default/dropbear
-sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 777 -p 666"/g' /etc/default/dropbear
-echo "/bin/false" >> /etc/shells
-service ssh restart
-service dropbear restart
-
-# Install WebMin
-cd
-apt-get -y install webmin
-sed -i 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
-service webmin restart
-
-# Install Stunnel
-apt-get -y install stunnel4
-wget -O /etc/stunnel/stunnel.pem "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/stunnel.pem"
-wget -O /etc/stunnel/stunnel.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/stunnel.conf"
-sed -i $MYIP2 /etc/stunnel/stunnel.conf
-sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
-service stunnel4 restart
-
-# Install Fail2Ban
-apt-get -y install fail2ban;
-service fail2ban restart
-
-# Install DDOS Deflate
-cd
-apt-get -y install dnsutils dsniff
-apt-get install net-tools
-wget "https://github.com/nokyaselpon/MyScript/raw/main/ddos-deflate-master.zip"
-unzip ddos-deflate-master.zip
-cd ddos-deflate-master
-./install.sh
-cd
-rm -rf ddos-deflate-master.zip
-
-# Install BadVPN
-cd
-wget -O /usr/bin/badvpn-udpgw "https://github.com/nokyaselpon/MyScript/raw/main/badvpn-udpgw"
-if [ "$OS" == "x86_64" ]; then
-  wget -O /usr/bin/badvpn-udpgw "https://github.com/nokyaselpon/MyScript/raw/main/badvpn-udpgw64"
-fi
-sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
-chmod +x /usr/bin/badvpn-udpgw
-screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
-
-
-#httpv1 setup
-sudo mkdir /usr/httpv1
-wget https://github.com/nokyaselpon/MyScript/raw/main/files/http.zip
-unzip http.zip
-chmod 755 httpv1
-sudo mv httpv1 /usr/httpv1/
-
 #httpv1 files
 wget https://github.com/nokyaselpon/MyScript/raw/main/files/hello.zip
 unzip hello.zip
@@ -365,8 +309,63 @@ EOF
 
 #services
 sudo systemctl daemon-reload
-sudo systemctl start httpv1
 sudo systemctl enable httpv1
+sudo systemctl start httpv1
+
+# Install Dropbear
+apt-get -y install dropbear
+sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_PORT=442/DROPBEAR_PORT=888/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 777 -p 666"/g' /etc/default/dropbear
+echo "/bin/false" >> /etc/shells
+service ssh restart
+service dropbear restart
+
+# Install Stunnel
+apt-get -y install stunnel4
+wget -O /etc/stunnel/stunnel.pem "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/stunnel.pem"
+wget -O /etc/stunnel/stunnel.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/stunnel.conf"
+sed -i $MYIP2 /etc/stunnel/stunnel.conf
+sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
+service stunnel4 restart
+
+# Install Fail2Ban
+apt-get -y install fail2ban;
+service fail2ban restart
+
+# Install DDOS Deflate
+cd
+apt-get -y install dnsutils dsniff
+apt-get install net-tools
+wget "https://github.com/nokyaselpon/MyScript/raw/main/ddos-deflate-master.zip"
+unzip ddos-deflate-master.zip
+cd ddos-deflate-master
+./install.sh
+cd
+rm -rf ddos-deflate-master.zip
+
+# Install WebMin
+cd
+apt-get -y install webmin
+sed -i 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
+service webmin restart
+
+# Install BadVPN
+cd
+wget -O /usr/bin/badvpn-udpgw "https://github.com/nokyaselpon/MyScript/raw/main/badvpn-udpgw"
+if [ "$OS" == "x86_64" ]; then
+  wget -O /usr/bin/badvpn-udpgw "https://github.com/nokyaselpon/MyScript/raw/main/badvpn-udpgw64"
+fi
+sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
+chmod +x /usr/bin/badvpn-udpgw
+screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
+
+#httpv1 setup
+sudo mkdir /usr/httpv1
+wget https://github.com/nokyaselpon/MyScript/raw/main/files/http.zip
+unzip http.zip
+chmod 755 httpv1
+sudo mv httpv1 /usr/httpv1/
 
 # Banner
 rm /etc/issue.net
