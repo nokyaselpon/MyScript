@@ -394,8 +394,9 @@ apt-get -y --force-yes -f install libxml-parser-perl
 
 # Install Screenfetch
 apt-get -y install lsb-release scrot
-wget -O screenfetch "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/screenfetch"
+wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/screenfetch"
 chmod +x screenfetch
+mv screenfetch /usr/sbin
 
 
 # Download Commands
@@ -503,6 +504,8 @@ echo -e "==================================================="
 echo -e " "
 echo -e "                Installation Done!"
 echo -e " "
-sleep 3
-
-cd
+sleep 2
+clear
+sleep 1
+screenfetch
+sleep 1
