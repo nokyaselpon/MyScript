@@ -14,10 +14,6 @@ MYIP2="s/xxxxxxxxx/$MYIP/g";
 # Root Directory
 cd
 
-#cron
-wget -O /etc/crontab "https://github.com/nokyaselpon/MyScript/raw/main/files/crontab"
-service crontab restart
-
 # Disable IPV6
 echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 
@@ -44,9 +40,12 @@ service dropbear restart
 apt-get -y install nano iptables dnsutils screen whois ngrep unzip
 
 # Install OpenVPN
+wget "https://github.com/nokyaselpon/MyScript/raw/main/files/ovpn.sh"
+mv ovpn.sh /usr/sbin/
+chmod +x /usr/sbin/ovpn.sh
+sleep 1
 apt-get -y install openvpn easy-rsa openssl iptables
 cp -r /usr/share/easy-rsa/ /etc/openvpn
-sleep 1
 sed -ie 's|export KEY_COUNTRY="US"|export KEY_COUNTRY="PH"|' /etc/openvpn/easy-rsa/
 sed -ie 's|export KEY_PROVINCE="CA"|export KEY_PROVINCE="Manila"|' /etc/openvpn/easy-rsa/vars
 sed -ie 's|export KEY_CITY="SanFrancisco"|export KEY_CITY="Manila"|' /etc/openvpn/easy-rsa/vars
@@ -401,6 +400,9 @@ wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/screenfe
 chmod +x screenfetch
 mv screenfetch /usr/sbin/
 
+#cron
+wget -O /etc/crontab "https://github.com/nokyaselpon/MyScript/raw/main/files/crontab"
+service crontab restart
 
 # Download Commands
 cd /usr/bin
