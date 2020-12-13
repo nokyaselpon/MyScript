@@ -15,7 +15,7 @@ TIMEOUT = 60
 MSG = '25th Baam'
 COR = '<font color="red">'
 FTAG = '</font>'
-DEFAULT_HOST = '0.0.0.0:22'
+DEFAULT_HOST = '0.0.0.0:66'
 RESPONSE = "HTTP/1.1 200 " + str(COR) + str(MSG) + str(FTAG) + "\r\n\r\n"
  
 class Server(threading.Thread):
@@ -91,7 +91,7 @@ class ConnectionHandler(threading.Thread):
         self.client = socClient
         self.client_buffer = ''
         self.server = server
-        self.log = 'Conexao: ' + str(addr)
+        self.log = 'Connected: ' + str(addr)
 
     def close(self):
         try:
@@ -233,7 +233,7 @@ def main(host=IP, port=PORT):
         try:
             time.sleep(2)
         except KeyboardInterrupt:
-            print '\nParando...'
+            print '\nExting...'
             server.close()
             break
 if __name__ == '__main__':
