@@ -12,7 +12,7 @@ TIMEOUT = 60
 MSG = 'Jue Viole Grace'
 COR = '<font color="red">'
 FTAG = '</font>'
-DEFAULT_HOST = '0.0.0.0:66'
+DEFAULT_HOST = '0.0.0.0:666'
 RESPONSE = "HTTP/1.1 200 " + str(COR) + str(MSG) + str(FTAG) + "\r\n\r\n"
  
 class Server(threading.Thread):
