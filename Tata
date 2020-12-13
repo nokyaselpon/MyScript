@@ -508,8 +508,6 @@ echo -e "==================================================="
 echo -e " "
 echo -e "              Installation Done!"
 echo -e " "
-sleep 2
-clear
+echo -e "        Type menu for the list of commands"
 sleep 1
-screenfetch
-sleep 1
+
