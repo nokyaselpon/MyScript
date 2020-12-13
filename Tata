@@ -147,12 +147,12 @@ keep-alive-timeout 5
 tolerate-pipelining 1
 socket-timeout 300
 EOF
+echo -e "\n"
+echo -e "\n"
 sleep 1
-
 service privoxy restart
 
-echo -e "\n"
-echo -e "\n"
+
 
 #Socks
 mkdir /usr/sbin/socks
