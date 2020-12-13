@@ -265,7 +265,7 @@ sleep 1
 # Setup Privoxy
 apt-get install -y privoxy
 echo 'Setting up Privoxy'
-cat EOF  /etc/privoxy/config
+cat << EOF > /etc/privoxy/config
 user-manual /usr/share/doc/privoxy/user-manual
 confdir /etc/privoxy
 logdir /var/log/privoxy
