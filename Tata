@@ -157,9 +157,13 @@ echo -e "\n"
 echo -e "\n"
 
 #Socks
+mkdir /usr/sbin/socks
 wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/foxy.py"
-python foxy.py > out &
+wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/foxy2.py"
+mv foxy.py /usr/sbin/socks/
+mv foxy2.py /usr/sbin/socks/
 echo -e "Socks proxy done installation"
+
 sleep 2
 
 #httpv1 setup
@@ -495,15 +499,14 @@ echo -e "    OpenSSH:       "$opensshport
 echo -e "    Dropbear:      "$dropbearport
 echo -e "    SSL:           "$stunnel4port
 echo -e "    OpenVPN:        "210
-echo -e "    Port Squid:    "$squidport
-echo -e "                                                  "
-echo -e " "
-echo -e "    Commands       :   menu /accounts /options "
+echo -e "    Squid Proxy:    "$squidport
+echo -e "    Python proxy:   9000, 9500 "
 echo -e "    OVPN config    :   http://$MYIP/client.ovpn  "
 echo -e "                                                  "
+echo -e " "        
 echo -e "==================================================="
 echo -e " "
-echo -e "                Installation Done!"
+echo -e "              Installation Done!"
 echo -e " "
 sleep 2
 clear
