@@ -396,7 +396,7 @@ apt-get -y --force-yes -f install libxml-parser-perl
 apt-get -y install lsb-release scrot
 wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/screenfetch"
 chmod +x screenfetch
-mv screenfetch /usr/sbin
+mv screenfetch /usr/sbin/
 
 
 # Download Commands
