@@ -8,6 +8,7 @@ echo " "
 echo -e " Installation starting..........."
 sleep 1
 Privoxy="32754";
+Privoxy2="s/xxxxx/$privoxy/g";
 MYIP=$(wget -qO- ipv4.icanhazip.com);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 
