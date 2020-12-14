@@ -6,28 +6,28 @@
 ScriptName='Nath'
 
 #SSH ports
-ssh_port1 ='22'
-ssh_port1 ='132'
+ssh_port1='22'
+ssh_port1='132'
 
 #Dropbear ports
-drop_1 ='666'
-drop_2 ='777'
+drop_1='666'
+drop_2='777'
 
 #Stunnel ports
-stun_1 ='142'
-stun_2 ='143'
+stun_1='142'
+stun_2='143'
 
 #Openvpn port
-ovpn_port ='210'
+ovpn_port='210'
 
 #Openvpn download_port
-ovpn_dl ='86'
+ovpn_dl='86'
 
 #Privoxy port
-privoxy_port ='32754'
+privoxy_port='32754'
 
 #Set Local time
-vps_time ='Asia/Manila'
+vps_time='Asia/Manila'
 
 
 #Start
