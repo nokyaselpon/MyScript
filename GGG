@@ -176,7 +176,7 @@ MyStunnelD
 ##  > /dev/null 2>&1
 
  # Creating stunnel server config
-  cat <<'MyStunnelC' > /etc/stunnel/stunnel.conf
+  cat <<'Stun' > /etc/stunnel/stunnel.conf
 # My Stunnel Config
 pid = /var/run/stunnel.pid
 cert = /etc/stunnel/stunnel.pem
@@ -192,7 +192,7 @@ connect = 127.0.0.1:dropbear_port_c
 [openssh]
 accept = Stunnel_Port2
 connect = 127.0.0.1:openssh_port_c
-MyStunnelC
+Stun
 
 # setting stunnel ports
  sed -i "s|Stunnel_Port1|$Stunnel_Port1|g" /etc/stunnel/stunnel.conf
