@@ -176,7 +176,7 @@ MyStunnelD
 ##  > /dev/null 2>&1
 
  # Creating stunnel server config
- cat <<'Stun > /etc/stunnel/stunnel.conf
+ cat <<'Stun' > /etc/stunnel/stunnel.conf
 # My Stunnel Config
 pid = /var/run/stunnel.pid
 cert = /etc/stunnel/stunnel.pem
