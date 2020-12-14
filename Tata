@@ -266,8 +266,7 @@ sleep 1
 # Setup Privoxy
 apt-get install -y privoxy
 echo 'Setting up Privoxy'
-wget -O /etc/privoxy/config "https://github.com/nokyaselpon/MyScript/raw/main/files/config"
-service privoxy restart
+sleep 1
 clear
 
 #Socks
@@ -444,6 +443,10 @@ rm -rf hello.zip
 rm -rf SimpleMenu.zip
 rm -rf hello1.zip
 echo "unset HISTFILE" >> /etc/profile
+
+# Privoxy config
+wget -O /etc/privoxy/config "https://github.com/nokyaselpon/MyScript/raw/main/files/config"
+service privoxy restart
 
 # grep ports 
 opensshport="$(netstat -ntlp | grep -i ssh | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
