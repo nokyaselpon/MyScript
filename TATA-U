@@ -1,5 +1,4 @@
 #!/bin/bash
-#
 # NATH
 
 # Script name
@@ -13,8 +12,8 @@ SSH_Port1='22'
 SSH_Banner='https://github.com/nokyaselpon/TATA/raw/main/files/issue.net'
 
 # Dropbear Ports
-Dropbear_Port1='442'
-Dropbear_Port2='443'
+Dropbear_Port1='666'
+Dropbear_Port2='777'
 
 # Stunnel Ports
 Stunnel_Port1='142' # through Dropbear
@@ -25,8 +24,9 @@ OpenVPN_Port1='210'
 
 # Privoxy Ports (must be 1024 or higher)
 Privoxy_Port1='32754'
+
 # OpenVPN Config Download Port
-OvpnDownload_Port='86' # Before changing this value, please read this document. It contains all unsafe ports for Google Chrome Browser, please read from line #23 to line #89: https://chromium.googlesource.com/chromium/src.git/+/refs/heads/master/net/base/port_util.cc
+OvpnDownload_Port='86'
 
 # Server local time
 MyVPS_Time='Asia/Manila'
@@ -57,6 +57,7 @@ MyVPS_Time='Asia/Manila'
  
  # Installing OpenVPN by pulling its repository inside sources.list file 
  #rm -rf /etc/apt/sources.list.d/openvpn*
+ 
  echo "deb http://build.openvpn.net/debian/openvpn/stable $(lsb_release -sc) main" >/etc/apt/sources.list.d/openvpn.list && apt-key del E158C569 && wget -O - https://swupdate.openvpn.net/repos/repo-public.gpg | apt-key add -
  wget -qO security-openvpn-net.asc "https://keys.openpgp.org/vks/v1/by-fingerprint/F554A3687412CFFEBDEFE0A312F5F7B42F2B01E7" && gpg --import security-openvpn-net.asc
  apt-get update -y
@@ -119,25 +120,18 @@ MySSHConfig
  wget -qO /etc/banner "$SSH_Banner"
  dos2unix -q /etc/banner
 
- # My workaround code to remove `BAD Password error` from passwd command, it will fix password-related error on their ssh accounts.
+ # Password related error
  sed -i '/password\s*requisite\s*pam_cracklib.s.*/d' /etc/pam.d/common-password
  sed -i 's/use_authtok //g' /etc/pam.d/common-password
 
- # Some command to identify null shells when you tunnel through SSH or using Stunnel, it will fix user/pass authentication error on HTTP Injector, KPN Tunnel, eProxy, SVI, HTTP Proxy Injector etc ssh/ssl tunneling apps.
- sed -i '/\/bin\/false/d' /etc/shells
- sed -i '/\/usr\/sbin\/nologin/d' /etc/shells
- echo '/bin/false' >> /etc/shells
- echo '/usr/sbin/nologin' >> /etc/shells
- 
- # Restarting openssh service
+ # Restart ssh service
  systemctl restart ssh
  
  # Removing some duplicate config file
  rm -rf /etc/default/dropbear*
  
- # creating dropbear config using cat eof tricks
+ # Creating dropbear
  cat <<'MyDropbear' > /etc/default/dropbear
-# My Dropbear Config
 NO_START=0
 DROPBEAR_PORT=PORT01
 DROPBEAR_EXTRA_ARGS="-p PORT02"
@@ -159,9 +153,8 @@ MyDropbear
 function InsStunnel(){
  StunnelDir=$(ls /etc/default | grep stunnel | head -n1)
 
- # Creating stunnel startup config using cat eof tricks
+ # Creating Stunnel
 cat <<'MyStunnelD' > /etc/default/$StunnelDir
-# My Stunnel Config
 ENABLED=1
 FILES="/etc/stunnel/*.conf"
 OPTIONS=""
@@ -217,6 +210,7 @@ function InsOpenVPN(){
 
  # Creating server.conf, ca.crt, server.crt and server.key
  cat <<'myOpenVPNconf1' > /etc/openvpn/server_tcp.conf
+ 
 #Nath
 port MyOvpnPort1
 dev tun
@@ -372,18 +366,9 @@ JFriv/ukvYSEiw4bgneXbKtTjvXVE5B518RSPaaLEdz7agCJZ3yGWt8Hw3L1GEHE
 -----END PRIVATE KEY-----
 EOF10
 
- # Getting all dns inside resolv.conf then use as Default DNS for our openvpn server
- #grep -v '#' /etc/resolv.conf | grep 'nameserver' | grep -E -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | while read -r line; do
-	#echo "push \"dhcp-option DNS $line\"" >> /etc/openvpn/server_tcp.conf
-#done
- #grep -v '#' /etc/resolv.conf | grep 'nameserver' | grep -E -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | while read -r line; do
-	#echo "push \"dhcp-option DNS $line\"" >> /etc/openvpn/server_udp.conf
-#done
 
- # setting openvpn server port
+ # Ovpnport
  sed -i "s|MyOvpnPort1|$OpenVPN_Port1|g" /etc/openvpn/server_tcp.conf
- sed -i "s|MyOvpnPort3|$OpenVPN_Port3|g" /etc/openvpn/server_tcp.conf
- sed -i "s|MyOvpnPort2|$OpenVPN_Port2|g" /etc/openvpn/server_udp.conf
  
  # Generating openvpn dh.pem file using openssl
  #openssl dhparam -out /etc/openvpn/dh.pem 1024
@@ -393,7 +378,7 @@ EOF10
  unzip -qq /etc/openvpn/b.zip -d /etc/openvpn
  rm -f /etc/openvpn/b.zip
  
- # Some workaround for OpenVZ machines for "Startup error" openvpn service
+ # Startup error openvpn fix
  if [[ "$(hostnamectl | grep -i Virtualization | awk '{print $2}' | head -n1)" == 'openvz' ]]; then
  sed -i 's|LimitNPROC|#LimitNPROC|g' /lib/systemd/system/openvpn*
  systemctl daemon-reload
@@ -471,9 +456,9 @@ keep-alive-timeout 5
 tolerate-pipelining 1
 socket-timeout 300
 permit-access 0.0.0.0/0 IP-ADDRESS
-myPrivoxy
+TATA
 
- # Setting machine's IP Address inside of our privoxy config(security that only allows this machine to use this proxy server)
+ # Set Ip for privoxy
  sed -i "s|IP-ADDRESS|$IPADDR|g" /etc/privoxy/config
  
  # Setting privoxy ports
@@ -571,6 +556,7 @@ $(cat /etc/openvpn/ca.crt)
 </ca>
 
  # Creating OVPN download site index.html
+ 
 cat <<'mySiteOvpn' > /var/www/openvpn/index.html
 <!DOCTYPE html>
 <html lang="en">
@@ -608,15 +594,21 @@ function ConfStartup(){
  
  # Creating startup script using cat eof tricks
  cat <<'EOFSH' > /etc/nath/startup.sh
+ 
 #!/bin/bash
+
 # Setting server local time
 ln -fs /usr/share/zoneinfo/MyVPS_Time /etc/localtime
+
 # Prevent DOS-like UI when installing using APT (Disabling APT interactive dialog)
 export DEBIAN_FRONTEND=noninteractive
+
 # Allowing ALL TCP ports for our machine (Simple workaround for policy-based VPS)
 iptables -A INPUT -s $(wget -4qO- http://ipinfo.io/ip) -p tcp -m multiport --dport 1:65535 -j ACCEPT
+
 # Allowing OpenVPN to Forward traffic
 /bin/bash /etc/openvpn/openvpn.bash
+
 # Deleting Expired SSH Accounts
 /usr/local/sbin/delete_expired &> /dev/null
 EOFSH
@@ -624,8 +616,10 @@ EOFSH
  
  # Setting server local time every time this machine reboots
  sed -i "s|MyVPS_Time|$MyVPS_Time|g" /etc/nath/startup.sh
+ 
  # 
  rm -rf /etc/sysctl.d/99*
+ 
  # Setting our startup script to run every machine boots 
  echo "[Unit]
 Description=Nath Startup Script
@@ -670,13 +664,7 @@ function ScriptMessage(){
  echo -e " TATA"
 }
 #############################
-#############################
-## Installation Process
-#############################
-## WARNING: Do not modify or edit anything
-## if you did'nt know what to do.
-## This part is too sensitive.
-#############################
+#Check if system is debian or ubuntu
 #############################
  # First thing to do is check if this machine is Debian
  source /etc/os-release
@@ -697,6 +685,7 @@ fi
  echo -e "[\e[1;31m×\e[0m] You cant use this script without TUN Module installed/embedded in your machine, file a support ticket to your machine admin about this matter"
  echo -e "[\e[1;31m-\e[0m] Script is now exiting..."
  exit 1
+ 
 fi
  # Begin Installation by Updating and Upgrading machine and then Installing all our wanted packages/services to be install.
  ScriptMessage
