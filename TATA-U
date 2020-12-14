@@ -773,7 +773,6 @@ fi
  echo -e " OpenVPN: $OpenVPN_Port1, $OpenVPN_Port2"
  echo -e " NGiNX: $OvpnDownload_Port"
  echo -e " Webmin: 10000"
- echo -e " L2tp IPSec Key: xjvpn13"
  echo -e ""
  echo -e ""
  echo -e " OpenVPN Configs Download site"
@@ -783,8 +782,6 @@ fi
  echo -e " http://$IPADDR:$OvpnDownload_Port/Configs.zip"
  echo -e ""
  echo -e ""
- echo -e " [Note] DO NOT RESELL THIS SCRIPT"
  # Clearing all logs from installation
  rm -rf /root/.bash_history && history -c && echo '' > /var/log/syslog
-rm -f Ubuntu-VPS-Installer*
 exit 1
