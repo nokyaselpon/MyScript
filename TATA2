@@ -693,7 +693,7 @@ OvpnConfigs
 ConfStartup
 
 #Configure Menu
-ConfMenu
+menuConf
 
 clear
 cd ~
