@@ -265,15 +265,6 @@ echo 'Setting up Privoxy'
 sleep 1
 clear
 
-#Socks
-mkdir /usr/sbin/socks
-wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/foxy.py"
-wget "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/foxy2.py"
-mv foxy.py /usr/sbin/socks/
-mv foxy2.py /usr/sbin/socks/
-echo -e "Socks proxy done installation"
-sleep 1
-
 #httpv1 setup
 sudo mkdir /usr/httpv1
 wget https://github.com/nokyaselpon/MyScript/raw/main/files/http.zip
@@ -467,7 +458,6 @@ echo -e "    Dropbear:      "$dropbearport
 echo -e "    SSL:           "$stunnel4port
 echo -e "    OpenVPN:        "210
 echo -e "    Squid Proxy:    "$squidport
-echo -e "    Python proxy:   9000, 9500 "
 echo -e "    OVPN config    :   http://$MYIP/client.ovpn  "
 echo -e "                                                  "
 echo -e " "        
