@@ -1,11 +1,7 @@
 #!/bin/bash
-# Ubuntu VPS Installer
+#
 # NATH
 
-#############################
-#############################
-
-# Variables (Can be changed depends on your preferred values)
 # Script name
 
 MyScriptName='Nath'
@@ -35,10 +31,6 @@ OvpnDownload_Port='86' # Before changing this value, please read this document. 
 # Server local time
 MyVPS_Time='Asia/Manila'
 
-## All function used for this script
-## WARNING: Do not modify or edit anything
-## if you did'nt know what to do.
-## This part is too sensitive.
 
 #Start
 
@@ -230,8 +222,8 @@ port MyOvpnPort1
 dev tun
 proto tcp
 ca /etc/openvpn/ca.crt
-cert /etc/openvpn/xbarts.crt
-key /etc/openvpn/xbarts.key
+cert /etc/openvpn/nath.crt
+key /etc/openvpn/nath.key
 dh none
 persist-tun
 persist-key
@@ -286,7 +278,7 @@ qLaAs4jTq/IhomRM5eEZRvcCx7sgs5zu3ggD6HFZqrlrTS7XKxBgASkuJtT/DiT8
 u37RrsJDD4VPMq8d+Jc0HqPwdatkKg==
 -----END CERTIFICATE-----
 EOF7
- cat <<'EOF9'> /etc/openvpn/NATH.crt
+ cat <<'EOF9'> /etc/openvpn/nath.crt
 Certificate:
     Data:
         Version: 3 (0x2)
@@ -361,7 +353,7 @@ VxsIjQgOzRTwWlBZE/kEZNA3lrAdt39iLwN4Ehrsk72cCxW4ccctdVBWPxOUIgrj
 PcbabOGNlsytZlDzXNt0/Q==
 -----END CERTIFICATE-----
 EOF9
- cat <<'EOF10'> /etc/openvpn/NATH.key
+ cat <<'EOF10'> /etc/openvpn/nath.key
 -----BEGIN PRIVATE KEY-----
 MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAKe0p9QlRj0M8FWb
 MsuLkuLW1NgJwmAUMBsnlXaHTp4+sQzJmAJ3oezow5JttOmGGXY1cX0rkXDAm/O3
@@ -610,9 +602,9 @@ function ConfStartup(){
  # For cron commands, visit https://crontab.guru
  echo -e "0 0 * * * /sbin/reboot >/dev/null 2>&1" >> /etc/cron.d/mdadm
  # Creating directory for startup script
- rm -rf /etc/barts
- mkdir -p /etc/barts
- chmod -R 755 /etc/barts
+ rm -rf /etc/nath
+ mkdir -p /etc/nath
+ chmod -R 755 /etc/nath
  
  # Creating startup script using cat eof tricks
  cat <<'EOFSH' > /etc/nath/startup.sh
@@ -742,7 +734,7 @@ fi
  clear
  cd ~
  # Running sysinfo 
- bash /etc/profile.d/barts.sh
+ bash /etc/profile.d/nath.sh
  
  # Showing script's banner message
  ScriptMessage
