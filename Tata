@@ -1,13 +1,13 @@
 #!/bin/bash
 # Nath
 # Start
+MYIP=$(wget -qO- ipv4.icanhazip.com);
+MYIP2="s/xxxxxxxxx/$MYIP/g";
 sleep 1
 echo " "
 clear
 echo " "
 echo -e " Installation starting..........."
-MYIP=$(wget -qO- ipv4.icanhazip.com);
-MYIP2="s/xxxxxxxxx/$MYIP/g";
 
 # Root Directory
 cd
