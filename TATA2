@@ -7,7 +7,7 @@ ScriptName='Nath'
 
 #SSH ports
 ssh_port1='22'
-ssh_port1='132'
+ssh_port2='132'
 
 #Dropbear ports
 drop_1='666'
