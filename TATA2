@@ -541,9 +541,14 @@ comp-lzo
 setenv CLIENT_CERT 0
 reneg-sec 0
 verb 1
-http-proxy $(curl -s http://ipinfo.io/ip || wget -q http://ipinfo.io/ip) $Proxy_Port2
-http-proxy-option CUSTOM-HEADER Host redirect.googlevideo.com
-http-proxy-option CUSTOM-HEADER X-Forwarded-For redirect.googlevideo.com
+http-proxy $(curl -s http://ipinfo.io/ip || wget -q http://ipinfo.io/ip) $sqd_p1
+http-proxy-option VERSION 1.1
+http-proxy-option AGENT Chrome/80.0.3987.87
+http-proxy-option CUSTOM-HEADER Host googleapis.google-analytics.com
+http-proxy-option CUSTOM-HEADER X-Forward-Host googleapis.google-analytics.com
+http-proxy-option CUSTOM-HEADER X-Forwarded-For googleapis.google-analytics.com
+http-proxy-option CUSTOM-HEADER Referrer googleapis.google-analytics.com
+http-proxy-retry
 <ca>
 $(cat /etc/openvpn/ca.crt)
 </ca>
