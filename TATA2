@@ -3,13 +3,13 @@
 #Installer-v.01
 echo -e "#########################################"
 echo -e "#                                       #"
-echo -e "#    Script Installation Starting       #"
+echo -e "#    Script Installation Starting...... #"
 echo -e "# Press Ctrl + C if you want to cancel. #"
 echo -e "#                                       #"
 echo -e "#            NATH Installer             #"
 echo -e "#                                       #"
 echo -e "#########################################"
-sleep 3
+sleep 5
 
 #Script Name
 ScriptName='Nath'
