@@ -1,6 +1,12 @@
 #!/bin/bash
 # NATH
-#
+#########################################
+#                                       #
+#    Script Installation Starting       #
+# Press Ctrl + C if you want to cancel. #
+#                                       #
+#########################################
+sleep 3
 
 #Script Name
 ScriptName='Nath'
