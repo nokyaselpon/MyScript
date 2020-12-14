@@ -705,6 +705,9 @@ sed -i 's@#Banner@Banner@g' /etc/ssh/sshd_config
 sed -i 's@DROPBEAR_BANNER=""@DROPBEAR_BANNER="/etc/issue.net"@g' /etc/default/dropbear
 service ssh restart
 service dropbear restart
+systemctl start openvpn
+systemctl enable openvpn
+service openvpn restart
 
 #run sysinfo & message
 bash /etc/profile.d/tata.sh
