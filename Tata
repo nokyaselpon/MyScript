@@ -466,6 +466,6 @@ echo -e " "
 echo -e "              Installation Done!"
 echo -e " "
 echo -e "        Type menu for the list of commands"
-echo -e" "
+echo -e " "
 sleep 1
 
