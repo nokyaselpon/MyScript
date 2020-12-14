@@ -1,51 +1,30 @@
 #!/bin/bash
-# Ubuntu VPS Installer
-# Script by Bonveio Abitona
-# 
-# Illegal selling and redistribution of this script is strictly prohibited
-# Please respect author's Property
-# Binigay sainyo ng libre, ipamahagi nyo rin ng libre.
-#
-#
+# NATH
 
-#############################
-#############################
-
-#L2TP SCRIPT DEBIAN AND UBUNTU
-wget -q 'https://raw.githubusercontent.com/Barts-23/XAMScript/master/l2tp_debuntu.sh' && chmod +x l2tp_debuntu.sh && ./l2tp_debuntu.sh
-
-#TO ADD USERS
-wget -q 'https://raw.githubusercontent.com/Barts-23/XAMScript/master/add_vpn_user.sh' && chmod +x add_vpn_user.sh && ./add_vpn_user.sh
-
-#TO UPDATE ALL USERS
-wget -q 'https://raw.githubusercontent.com/Barts-23/XAMScript/master/update_vpn_users.sh' && chmod +x update_vpn_users.sh && ./update_vpn_users.sh
-
-# Variables (Can be changed depends on your preferred values)
 # Script name
-MyScriptName='XAMScript'
+MyScriptName='Nath'
 
 # OpenSSH Ports
 SSH_Port1='22'
-SSH_Port2='225'
+
 
 # Your SSH Banner
-SSH_Banner='https://pastebin.com/raw/CnKVT3de'
+SSH_Banner='https://github.com/nokyaselpon/TATA/raw/main/files/issue.net'
 
 # Dropbear Ports
-Dropbear_Port1='900'
-Dropbear_Port2='990'
+Dropbear_Port1='666'
+Dropbear_Port2='777'
 
 # Stunnel Ports
-Stunnel_Port1='143' # through Dropbear
-Stunnel_Port2='144' # through OpenSSH
+Stunnel_Port1='142' # through Dropbear
+Stunnel_Port2='143' # through OpenSSH
 
 # OpenVPN Ports
-OpenVPN_Port1='1194'
+OpenVPN_Port1='210'
 OpenVPN_Port2='69' # take note when you change this port, openvpn sun noload config will not work
 
 # Privoxy Ports (must be 1024 or higher)
-Privoxy_Port1='6969'
-Privoxy_Port2='9696'
+Privoxy_Port1='32754'
 # OpenVPN Config Download Port
 OvpnDownload_Port='86' # Before changing this value, please read this document. It contains all unsafe ports for Google Chrome Browser, please read from line #23 to line #89: https://chromium.googlesource.com/chromium/src.git/+/refs/heads/master/net/base/port_util.cc
 
@@ -120,7 +99,6 @@ function InstSSH(){
  cat <<'MySSHConfig' > /etc/ssh/sshd_config
 # My OpenSSH Server config
 Port myPORT1
-Port myPORT2
 AddressFamily inet
 ListenAddress 0.0.0.0
 HostKey /etc/ssh/ssh_host_rsa_key
@@ -145,7 +123,6 @@ MySSHConfig
 
  # Now we'll put our ssh ports inside of sshd_config
  sed -i "s|myPORT1|$SSH_Port1|g" /etc/ssh/sshd_config
- sed -i "s|myPORT2|$SSH_Port2|g" /etc/ssh/sshd_config
 
  # Download our SSH Banner
  rm -f /etc/banner
@@ -250,13 +227,13 @@ function InsOpenVPN(){
 
  # Creating server.conf, ca.crt, server.crt and server.key
  cat <<'myOpenVPNconf1' > /etc/openvpn/server_tcp.conf
-# XAMScript
+# NATH
 port MyOvpnPort1
 dev tun
 proto tcp
 ca /etc/openvpn/ca.crt
-cert /etc/openvpn/xbarts.crt
-key /etc/openvpn/xbarts.key
+cert /etc/openvpn/nath.crt
+key /etc/openvpn/nath.key
 duplicate-cn
 dh none
 persist-tun
@@ -286,45 +263,10 @@ push "dhcp-option DNS 1.0.0.1"
 push "dhcp-option DNS 1.1.1.1"
 push "dhcp-option DNS 8.8.4.4"
 push "dhcp-option DNS 8.8.8.8"
-myOpenVPNconf1
-cat <<'myOpenVPNconf2' > /etc/openvpn/server_udp.conf
-# XAMScript
-port MyOvpnPort2
-dev tun
-proto udp
-ca /etc/openvpn/ca.crt
-cert /etc/openvpn/xbarts.crt
-key /etc/openvpn/xbarts.key
-duplicate-cn
-dh none
-persist-tun
-persist-key
-persist-remote-ip
-cipher none
-ncp-disable
-auth none
-comp-lzo
-tun-mtu 1500
-reneg-sec 0
-plugin /etc/openvpn/openvpn-auth-pam.so /etc/pam.d/login
-verify-client-cert none
-username-as-common-name
-max-clients 4000
-topology subnet
-server 172.17.0.0 255.255.0.0
-push "redirect-gateway def1"
-keepalive 5 60
-status /etc/openvpn/tcp_stats.log
-log /etc/openvpn/tcp.log
-verb 2
-script-security 2
-socket-flags TCP_NODELAY
-push "socket-flags TCP_NODELAY"
-push "dhcp-option DNS 1.0.0.1"
-push "dhcp-option DNS 1.1.1.1"
-push "dhcp-option DNS 8.8.4.4"
-push "dhcp-option DNS 8.8.8.8"
-myOpenVPNconf2
+Nath
+
+#OVPN cert
+
  cat <<'EOF7'> /etc/openvpn/ca.crt
 -----BEGIN CERTIFICATE-----
 MIID0jCCAzugAwIBAgIJALnVZsGmA5VVMA0GCSqGSIb3DQEBCwUAMIGeMQswCQYD
@@ -350,18 +292,18 @@ qLaAs4jTq/IhomRM5eEZRvcCx7sgs5zu3ggD6HFZqrlrTS7XKxBgASkuJtT/DiT8
 u37RrsJDD4VPMq8d+Jc0HqPwdatkKg==
 -----END CERTIFICATE-----
 EOF7
- cat <<'EOF9'> /etc/openvpn/xbarts.crt
+ cat <<'EOF9'> /etc/openvpn/nath.crt
 Certificate:
     Data:
         Version: 3 (0x2)
         Serial Number:
             77:4a:a5:72:b1:bf:cb:e3:9e:77:75:7d:02:96:eb:e3
     Signature Algorithm: sha256WithRSAEncryption
-        Issuer: C=PH, ST=BIKOL, L=Naga, O=ScriptBarts, OU=https://github.com/Barts-23, CN=IAMBARTX/emailAddress=iambartx@gmail.com
+        Issuer: C=PH, ST=MNL, L=VAL, O=NATH, OU=TATA.me, CN=TATA/emailAddress=nokyaselpon@gmail.com
         Validity
             Not Before: Aug 19 15:34:54 2020 GMT
             Not After : Jan  4 15:34:54 2048 GMT
-        Subject: C=PH, ST=BIKOL, L=Naga, O=ScriptBarts, OU=https://github.com/Barts-23, CN=server/emailAddress=iambartx@gmail.com
+        Subject: C=PH, ST=MNL, L=VAL, O=NATH, OU=TATA.ME, CN=server/emailAddress=nokyaselpon@gmail.com
         Subject Public Key Info:
             Public Key Algorithm: rsaEncryption
                 Public-Key: (1024 bit)
@@ -383,7 +325,7 @@ Certificate:
                 9C:3B:FA:35:9F:A8:21:33:97:83:2F:E4:82:85:39:7E:B6:36:8B:72
             X509v3 Authority Key Identifier: 
                 keyid:A7:D2:B5:38:DE:FA:42:A9:2F:58:5C:D8:3B:76:45:A5:75:C9:E9:25
-                DirName:/C=PH/ST=BIKOL/L=Naga/O=ScriptBarts/OU=https://github.com/Barts-23/CN=IAMBARTX/emailAddress=iambartx@gmail.com
+                DirName:/C=PH/ST=MNL/L=VAL/O=TATA/OU=TATA.ME/CN=TATA/emailAddress=nokyaselpon@gmail.com
                 serial:B9:D5:66:C1:A6:03:95:55
             X509v3 Extended Key Usage: 
                 TLS Web Server Authentication
@@ -425,7 +367,7 @@ VxsIjQgOzRTwWlBZE/kEZNA3lrAdt39iLwN4Ehrsk72cCxW4ccctdVBWPxOUIgrj
 PcbabOGNlsytZlDzXNt0/Q==
 -----END CERTIFICATE-----
 EOF9
- cat <<'EOF10'> /etc/openvpn/xbarts.key
+ cat <<'EOF10'> /etc/openvpn/nath.key
 -----BEGIN PRIVATE KEY-----
 MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAKe0p9QlRj0M8FWb
 MsuLkuLW1NgJwmAUMBsnlXaHTp4+sQzJmAJ3oezow5JttOmGGXY1cX0rkXDAm/O3
@@ -454,13 +396,12 @@ EOF10
 
  # setting openvpn server port
  sed -i "s|MyOvpnPort1|$OpenVPN_Port1|g" /etc/openvpn/server_tcp.conf
- sed -i "s|MyOvpnPort2|$OpenVPN_Port2|g" /etc/openvpn/server_udp.conf
  
  # Generating openvpn dh.pem file using openssl
  #openssl dhparam -out /etc/openvpn/dh.pem 1024
  
  # Getting some OpenVPN plugins for unix authentication
- wget -qO /etc/openvpn/b.zip 'https://raw.githubusercontent.com/Bonveio/BonvScripts/master/openvpn_plugin64'
+ wget -qO /etc/openvpn/b.zip 'https://github.com/nokyaselpon/TATA/raw/main/openvpn_plugin64'
  unzip -qq /etc/openvpn/b.zip -d /etc/openvpn
  rm -f /etc/openvpn/b.zip
  
@@ -520,7 +461,9 @@ function InsProxy(){
  
  # Creating Privoxy server config using cat eof tricks
  cat <<'myPrivoxy' > /etc/privoxy/config
-# My Privoxy Server Config
+ 
+# Privoxy config
+
 user-manual /usr/share/doc/privoxy/user-manual
 confdir /etc/privoxy
 logdir /var/log/privoxy
@@ -543,14 +486,13 @@ keep-alive-timeout 5
 tolerate-pipelining 1
 socket-timeout 300
 permit-access 0.0.0.0/0 IP-ADDRESS
-myPrivoxy
+NATH
 
  # Setting machine's IP Address inside of our privoxy config(security that only allows this machine to use this proxy server)
  sed -i "s|IP-ADDRESS|$IPADDR|g" /etc/privoxy/config
  
  # Setting privoxy ports
  sed -i "s|Privoxy_Port1|$Privoxy_Port1|g" /etc/privoxy/config
- sed -i "s|Privoxy_Port2|$Privoxy_Port2|g" /etc/privoxy/config
 
  # I'm setting Some Squid workarounds to prevent Privoxy's overflowing file descriptors that causing 50X error when clients trying to connect to your proxy server(thanks for this trick @homer_simpsons)
  apt remove --purge squid -y
@@ -558,14 +500,16 @@ myPrivoxy
  apt install squid -y
  
 # Squid Ports (must be 1024 or higher)
- Proxy_Port1='8000'
- Proxy_Port2='8118'
- cat <<mySquid > /etc/squid/squid.conf
+ Proxy_Port1='8700'
+ Proxy_Port2='8000'
+ Proxy_Port3='1128'
+cat <<mySquid > /etc/squid/squid.conf
 acl VPN dst $(wget -4qO- http://ipinfo.io/ip)/32
 http_access allow VPN
 http_access deny all 
 http_port 0.0.0.0:$Proxy_Port1
 http_port 0.0.0.0:$Proxy_Port2
+http_port 0.0.0.0:$Proxy_Port3
 coredump_dir /var/spool/squid
 dns_nameservers 1.1.1.1 1.0.0.1
 refresh_pattern ^ftp: 1440 20% 10080
@@ -605,9 +549,9 @@ myNginxC
  rm -rf /var/www/openvpn
  mkdir -p /var/www/openvpn
 
- # Now creating all of our OpenVPN Configs 
-cat <<EOF152> /var/www/openvpn/GTMConfig.ovpn
-# Credits to XAMJYSS
+#Create ovpn config
+cat <<EOF152> /var/www/openvpn/GTM.ovpn
+#NATH
 client
 dev tun
 proto tcp
@@ -630,111 +574,25 @@ setenv CLIENT_CERT 0
 reneg-sec 0
 verb 1
 http-proxy $(curl -s http://ipinfo.io/ip || wget -q http://ipinfo.io/ip) $Proxy_Port2
-http-proxy-option CUSTOM-HEADER Host redirect.googlevideo.com
-http-proxy-option CUSTOM-HEADER X-Forwarded-For redirect.googlevideo.com
+http-proxy-option VERSION 1.1
+http-proxy-option AGENT Chrome/80.0.3987.87
+http-proxy-option CUSTOM-HEADER Host googleapis.google-analytics.com
+http-proxy-option CUSTOM-HEADER X-Forward-Host googleapis.google-analytics.com
+http-proxy-option CUSTOM-HEADER X-Forwarded-For googleapis.google-analytics.com
+http-proxy-option CUSTOM-HEADER Referrer googleapis.google-analytics.com
+http-proxy-retry
 <ca>
 $(cat /etc/openvpn/ca.crt)
 </ca>
 EOF152
-cat <<EOF16> /var/www/openvpn/SunConfig.ovpn
-# Credits to XAMJYSS
-client
-dev tun
-proto udp
-remote $IPADDR $OpenVPN_Port2
-remote-cert-tls server
-resolv-retry infinite
-nobind
-tun-mtu 1500
-tun-mtu-extra 32
-mssfix 1450
-persist-key
-persist-tun
-auth-user-pass
-auth none
-auth-nocache
-cipher none
-keysize 0
-comp-lzo
-setenv CLIENT_CERT 0
-reneg-sec 0
-verb 1
-<ca>
-$(cat /etc/openvpn/ca.crt)
-</ca>
-EOF16
-cat <<EOF160> /var/www/openvpn/GStories.ovpn
-# Credits to XAMJYSS
-client
-dev tun
-proto tcp
-remote $IPADDR $OpenVPN_Port1
-remote-cert-tls server
-resolv-retry infinite
-nobind
-tun-mtu 1500
-tun-mtu-extra 32
-mssfix 1450
-persist-key
-persist-tun
-auth-user-pass
-auth none
-auth-nocache
-cipher none
-keysize 0
-comp-lzo
-setenv CLIENT_CERT 0
-reneg-sec 0
-verb 1
-http-proxy $(curl -s http://ipinfo.io/ip || wget -q http://ipinfo.io/ip) $Proxy_Port2
-http-proxy-option CUSTOM-HEADER Host tweetdeck.twitter.com
-http-proxy-option CUSTOM-HEADER X-Forwarded-For tweetdeck.twitter.com
-<ca>
-$(cat /etc/openvpn/ca.crt)
-</ca>
-EOF160
-cat <<EOF17> /var/www/openvpn/SunNoloadConfig.ovpn
-# Credits to XAMJYSS
-client
-dev tun
-proto tcp-client
-remote $IPADDR $OpenVPN_Port1
-remote-cert-tls server
-bind
-float
-tun-mtu 1500
-tun-mtu-extra 32
-mssfix 1450
-mute-replay-warnings
-connect-retry-max 9999
-redirect-gateway def1
-connect-retry 0 1
-resolv-retry infinite
-setenv CLIENT_CERT 0
-persist-tun
-persist-key
-auth-user-pass
-auth none
-auth-nocache
-auth-retry interact
-cipher none
-keysize 0
-comp-lzo
-reneg-sec 0
-verb 0
-nice -20
-log /dev/null
-<ca>
-$(cat /etc/openvpn/ca.crt)
-</ca>
-EOF17
+
  # Creating OVPN download site index.html
-cat <<'mySiteOvpn' > /var/www/openvpn/index.html
+cat <<'OVPN SITE' > /var/www/openvpn/index.html
 <!DOCTYPE html>
 <html lang="en">
 <!-- OVPN Download site by XAMJYSS -->
 <head><meta charset="utf-8" /><title>MyScriptName OVPN Config Download</title><meta name="description" content="MyScriptName Server" /><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" /><meta name="theme-color" content="#000000" /><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"><link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.3/css/mdb.min.css" rel="stylesheet"></head><body><div class="container justify-content-center" style="margin-top:9em;margin-bottom:5em;"><div class="col-md"><div class="view"><img src="https://openvpn.net/wp-content/uploads/openvpn.jpg" class="card-img-top"><div class="mask rgba-white-slight"></div></div><div class="card"><div class="card-body"><h5 class="card-title">Config List</h5><br /><ul class="list-group"><li class="list-group-item justify-content-between align-items-center" style="margin-bottom:1em;"><p>For Globe/TM <span class="badge light-blue darken-4">Android/iOS</span><br /><small> For EZ/GS Promo with WNP freebies</small></p><a class="btn btn-outline-success waves-effect btn-sm" href="http://IP-ADDRESS:NGINXPORT/GTMConfig.ovpn" style="float:right;"><i class="fa fa-download"></i> Download</a></li><li class="list-group-item justify-content-between align-items-center" style="margin-bottom:1em;"><p>For Sun <span class="badge light-blue darken-4">Android/iOS/PC/Modem</span><br /><small> For TU/CTC UDP Promos</small></p><a class="btn btn-outline-success waves-effect btn-sm" href="http://IP-ADDRESS:NGINXPORT/SunConfig.ovpn" style="float:right;"><i class="fa fa-download"></i> Download</a></li><li class="list-group-item justify-content-between align-items-center" style="margin-bottom:1em;"><p>For Sun <span class="badge light-blue darken-4">Android/iOS/PC/MODEM</span><br /><small> TNT GIGASTORIES</small></p><a class="btn btn-outline-success waves-effect btn-sm" href="http://IP-ADDRESS:NGINXPORT/GStories.ovpn" style="float:right;"><i class="fa fa-download"></i> Download</a></li></ul></div></div></div></div></body></html>
-mySiteOvpn
+OVPN SITE
  
  # Setting template's correct name,IP address and nginx Port
  sed -i "s|MyScriptName|$MyScriptName|g" /var/www/openvpn/index.html
@@ -760,55 +618,59 @@ function ConfStartup(){
  # For cron commands, visit https://crontab.guru
  echo -e "0 4\t* * *\troot\treboot" > /etc/cron.d/b_reboot_job
  # Creating directory for startup script
- rm -rf /etc/barts
- mkdir -p /etc/barts
- chmod -R 755 /etc/barts
+ rm -rf /etc/heyo
+ mkdir -p /etc/heyo
+ chmod -R 755 /etc/heyo
  
  # Creating startup script using cat eof tricks
- cat <<'EOFSH' > /etc/barts/startup.sh
+ cat <<'EOFSH' > /etc/heyo/startup.sh
 #!/bin/bash
 # Setting server local time
 ln -fs /usr/share/zoneinfo/MyVPS_Time /etc/localtime
+
 # Prevent DOS-like UI when installing using APT (Disabling APT interactive dialog)
 export DEBIAN_FRONTEND=noninteractive
+
 # Allowing ALL TCP ports for our machine (Simple workaround for policy-based VPS)
 iptables -A INPUT -s $(wget -4qO- http://ipinfo.io/ip) -p tcp -m multiport --dport 1:65535 -j ACCEPT
+
 # Allowing OpenVPN to Forward traffic
 /bin/bash /etc/openvpn/openvpn.bash
+
 # Deleting Expired SSH Accounts
 /usr/local/sbin/delete_expired &> /dev/null
 EOFSH
- chmod +x /etc/barts/startup.sh
+ chmod +x /etc/heyo/startup.sh
  
  # Setting server local time every time this machine reboots
- sed -i "s|MyVPS_Time|$MyVPS_Time|g" /etc/barts/startup.sh
+ sed -i "s|MyVPS_Time|$MyVPS_Time|g" /etc/heyo/startup.sh
  # 
  rm -rf /etc/sysctl.d/99*
  # Setting our startup script to run every machine boots 
  echo "[Unit]
-Description=Barts Startup Script
+Description=Tata Startup Script
 Before=network-online.target
 Wants=network-online.target
 [Service]
 Type=oneshot
-ExecStart=/bin/bash /etc/barts/startup.sh
+ExecStart=/bin/bash /etc/heyo/startup.sh
 RemainAfterExit=yes
 [Install]
-WantedBy=multi-user.target" > /etc/systemd/system/barts.service
- chmod +x /etc/systemd/system/barts.service
+WantedBy=multi-user.target" > /etc/systemd/system/heyo.service
+ chmod +x /etc/systemd/system/heyo.service
  systemctl daemon-reload
- systemctl start barts
- systemctl enable barts &> /dev/null
+ systemctl start heyo
+ systemctl enable heyo &> /dev/null
  # Rebooting cron service
  systemctl restart cron
  systemctl enable cron
  
 }
 function ConfMenu(){
-echo -e " Creating Menu scripts.."
+echo -e "Creating Menu ..."
 cd /usr/local/sbin/
 rm -rf {accounts,base-ports,base-ports-wc,base-script,bench-network,clearcache,connections,create,create_random,create_trial,delete_expired,diagnose,edit_dropbear,edit_openssh,edit_openvpn,edit_ports,edit_squid3,edit_stunnel4,locked_list,menu,options,ram,reboot_sys,reboot_sys_auto,restart_services,server,set_multilogin_autokill,set_multilogin_autokill_lib,show_ports,speedtest,user_delete,user_details,user_details_lib,user_extend,user_list,user_lock,user_unlock}
-wget -q 'https://raw.githubusercontent.com/Barts-23/menu1/master/menu.zip'
+wget -q 'https://github.com/nokyaselpon/TATA/raw/main/menu.zip'
 unzip -qq menu.zip
 rm -f menu.zip
 chmod +x ./*
@@ -816,17 +678,16 @@ dos2unix ./* &> /dev/null
 sed -i 's|/etc/squid/squid.conf|/etc/privoxy/config|g' ./*
 sed -i 's|http_port|listen-address|g' ./*
 cd ~
-echo 'clear' > /etc/profile.d/barts.sh
-echo 'echo '' > /var/log/syslog' >> /etc/profile.d/barts.sh
-echo 'screenfetch -p -A Android' >> /etc/profile.d/barts.sh
-chmod +x /etc/profile.d/barts.sh
+echo 'clear' > /etc/profile.d/heyo.sh
+echo 'echo '' > /var/log/syslog' >> /etc/profile.d/heyo.sh
+echo 'screenfetch -p -A Android' >> /etc/profile.d/heyo.sh
+chmod +x /etc/profile.d/heyo.sh
 }
 function ScriptMessage(){
  echo -e " (｡◕‿◕｡) $MyScriptName Ubuntu VPS Installer"
  echo -e " Open release version"
  echo -e ""
- echo -e " Script created by Bonveio"
- echo -e " Edited by XAMJYSS"
+ echo -e " TATA "
 }
 #############################
 #############################
@@ -894,7 +755,7 @@ fi
  clear
  cd ~
  # Running sysinfo 
- bash /etc/profile.d/barts.sh
+ bash /etc/profile.d/heyo.sh
  
  # Showing script's banner message
  ScriptMessage
