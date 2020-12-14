@@ -554,6 +554,7 @@ http-proxy-retry
 <ca>
 $(cat /etc/openvpn/ca.crt)
 </ca>
+EOF152
 
  # Creating OVPN download site index.html
  
