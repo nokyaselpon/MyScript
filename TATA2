@@ -704,7 +704,7 @@ ScriptMessage
  echo -e " OpenSSH: $ssh_port1, $ssh_port2"
  echo -e " Stunnel: $stun_1, $stun_2"
  echo -e " DropbearSSH: $drop_1, $drop_2"
- echo -e " Privoxy: $privoxy_p1"
+ echo -e " Privoxy: $privoxy_port"
  echo -e " Squid: $sqd_port1, $sqd_port2, $sqd_port3"
  echo -e " OpenVPN: $ovpn_port"
  echo -e " NGiNX: $ovpn_dl"
