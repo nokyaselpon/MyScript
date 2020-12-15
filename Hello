@@ -355,8 +355,8 @@ acl Safe_ports port 666
 acl Safe_ports port 7676
 acl Safe_ports port 777
 acl Safe_ports port 210
-acl SSH dst $MYIP/16
-acl VPN dst $MYIP/32
+acl SSH dst xxxxxxxxx/16
+acl VPN dst xxxxxxxxx/32
 http_access allow Safe_ports
 http_access allow manager localhost
 http_access deny manager
@@ -375,6 +375,9 @@ myproxy
 sed -i "s|sq1|$sqd_1|g" /etc/squid/squid.conf
 sed -i "s|sq2|$sqd_2|g" /etc/squid/squid.conf
 sed -i "s|sq3|$sqd_3|g" /etc/squid/squid.conf
+
+
+sed -i $MYIP2 /etc/squid/squid.conf
 service squid restart
 }
 
@@ -400,7 +403,7 @@ rm -rf webmin.deb
 
 #OPENVPN CONFIG DL
 function OvpnConfigs(){
- # Creating nginx config for our ovpn config downloads webserver
+
  cat <<'myNginxC' > /etc/nginx/conf.d/bonveio-ovpn-config.conf
 # My OpenVPN Config Download Directory
 server {
@@ -408,8 +411,8 @@ server {
  server_name localhost;
  root /var/www/openvpn;
  index index.html;
- myNginxC
 }
+ myNginxC
 
 sed -i "s|myNginx|$ovpn_dl|g" /etc/nginx/conf.d/bonveio-ovpn-config.conf
 
