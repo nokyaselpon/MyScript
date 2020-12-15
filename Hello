@@ -277,9 +277,9 @@ fi
 #SSH and DROPBEAR
 
 #SSH
-function sshdrop{
+function sshdrop(){
 # Removing some duplicated sshd server configs
- rm -f /etc/ssh/sshd_config*
+rm -f /etc/ssh/sshd_config*
  
 # Creating a SSH server config using cat eof tricks
 cat <<'MySSHConfig' > /etc/ssh/sshd_config
