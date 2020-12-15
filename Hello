@@ -503,32 +503,31 @@ function ScriptMessage(){
  echo -e ""
 }
 
-
 #Start installing
 
 #ssh&dropINS
-echo -e "Initializing...."
-sshdrop
+ echo -e "Initializing...."
+ sshdrop
 
 #openvpnINS
-echo -e "Initializing...."
-insOVPN
+ echo -e "Initializing...."
+ insOVPN
 
 #squidINS
 echo -e "Initializing...."
 proxy
 
 #WEBMIN
- echo -e "Configuring webmin..."
- InstWebmin
+echo -e "Configuring webmin..."
+InstWebmin
  
- # Configuring Nginx OVPN config download site
+# Configuring Nginx OVPN config download site
  OvpnConfigs
 
- # VPS Menu script v1.0
+# VPS Menu script v1.0
  ConfMenu
  
- # Setting server local time
+# Setting server local time
  ln -fs /usr/share/zoneinfo/$MyVPS_Time /etc/localtime
  
  clear
