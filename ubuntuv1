@@ -1,0 +1,477 @@
+#!/bin/bash
+#NATH
+
+echo " "
+clear
+echo "############################################"
+echo "##                                        ##"
+echo "##                                        ##"
+echo "##        Installation Starting.....      ##"
+echo "##                                        ##"
+echo "##       Press Ctrl + c to cancel         ##"
+echo "##                                        ##"
+echo "##                NATH                    ##"
+echo "##                                        ##"
+echo "############################################"
+sleep 6
+
+#SET IP
+MYIP="$(wget -qO- -t1 -T2 ipinfo.io/ip)";
+MYIP2="s/xxxxxxxxx/$MYIP/g";
+
+#ScriptName
+ScriptName='NATH'
+
+#Banner
+mybanner="https://github.com/nokyaselpon/TATA/raw/main/files/issue.net"
+
+#LIST PORTS
+
+#ssh port
+ssh_1='22'
+ssh_2='81'
+
+#dropbear port
+drop_1='666'
+drop_2='777'
+
+#squid port
+sqd_1='8000'
+sqd_2='8700'
+sqd_3='1128'
+
+#privoxy port
+priv_1='32754'
+priv_2='32755'
+
+#tinyproxy port
+tinyport='6500'
+
+#update and upgrade
+apt-get update
+apt-get upgrade -y
+
+#Remove firewall
+#apt-get remove --purge firewalld -y 
+apt-get remove --purge ufw -y
+apt install firewalld -y
+
+#Text color
+gem install lolcat
+
+#Installing essentials
+apt-get install nano wget curl zip unzip tar gzip p7zip-full bc rc openssl cron net-tools dnsutils dsniff dos2unix screen bzip2 ccrypt -y
+apt-get install zip
+
+#Installing services
+apt-get install dropbear privoxy ca-certificates nginx ruby tinyproxy apt-transport-https lsb-release squid screenfetch -y
+apt-get install dnsniffs
+
+#Remove unwanted packages
+apt-get autoremove -y
+
+#webmin
+function WEBMIN(){
+WebminFile='http://prdownloads.sourceforge.net/webadmin/webmin_1.910_all.deb'
+wget -qO webmin.deb "$WebminFile"
+
+#Install webmin package
+dpkg --install webmin.deb
+ 
+rm -rf webmin.deb
+ 
+#Configure Webmin
+sed -i 's|ssl=1|ssl=0|g' /etc/webmin/miniserv.conf
+systemctl restart webmin
+}
+
+#ssh and dropbear
+
+function SSHDROP(){
+rm -f /etc/ssh/sshd_config*
+cat <<'SSHD' > /etc/ssh/sshd_config
+Port myport1
+Port myport2
+AddressFamily inet
+ListenAddress 0.0.0.0
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+PermitRootLogin yes
+MaxSessions 1024
+PubkeyAuthentication yes
+PasswordAuthentication yes
+PermitEmptyPasswords no
+ChallengeResponseAuthentication no
+UsePAM yes
+X11Forwarding yes
+PrintMotd no
+ClientAliveInterval 240
+ClientAliveCountMax 2
+UseDNS no
+Banner /etc/banner
+AcceptEnv LANG LC_*
+Subsystem   sftp  /usr/lib/openssh/sftp-server
+SSHD
+
+sed -i "s|myport1|$ssh_1|g" /etc/ssh/sshd_config
+sed -i "s|myport2|$ssh_2|g" /etc/ssh/sshd_config
+systemctl restart ssh
+
+rm -f /etc/banner
+wget -qO /etc/banner "$mybanner"
+dos2unix -q /etc/banner
+
+#dropbear
+cat <<'DROP' > /etc/default/dropbear
+# My Dropbear Config
+NO_START=0
+DROPBEAR_PORT=dp1
+DROPBEAR_EXTRA_ARGS="-p dp2"
+DROPBEAR_BANNER="/etc/banner"
+DROPBEAR_RSAKEY="/etc/dropbear/dropbear_rsa_host_key"
+DROPBEAR_DSSKEY="/etc/dropbear/dropbear_dss_host_key"
+DROPBEAR_ECDSAKEY="/etc/dropbear/dropbear_ecdsa_host_key"
+DROPBEAR_RECEIVE_WINDOW=65536
+DROP
+
+sed -i "s|dp1|$drop_1|g" /etc/default/dropbear
+sed -i "s|dp2|$drop_2|g" /etc/default/dropbear
+systemctl restart dropbear
+
+}
+
+#proxies
+
+function PROXY(){
+
+#squid
+rm -rf /etc/squid/squid.conf
+cat <<'SQD' > /etc/squid/squid.conf
+#Nath Squid
+acl localhost src 127.0.0.1/32 ::1
+acl to_localhost dst 127.0.0.0/8 0.0.0.0/32 ::1
+acl Safe_ports port 666
+acl Safe_ports port 7676
+acl Safe_ports port 777
+acl Safe_ports port 210
+acl SSH dst xxxxxxxxx/16
+acl VPN dst xxxxxxxxx/32
+http_access allow Safe_ports
+http_access allow manager localhost
+http_access deny manager
+http_access allow localhost
+http_access allow SSH
+http_access allow VPN
+http_access deny all
+http_port pt_1
+http_port pt_2
+http_port pt_3
+acl Nath src 0.0.0.0/0.0.0.0
+no_cache deny Nath
+dns_nameservers 1.1.1.1 1.0.0.1
+visible_hostname NATH
+SQD
+
+sed -i $MYIP2 /etc/squid/squid.conf;
+sed -i "s|pt_1|$sqd_1|g" /etc/squid/squid.conf
+sed -i "s|pt_2|$sqd_2|g" /etc/squid/squid.conf
+sed -i "s|pt_3|$sqd_3|g" /etc/squid/squid.conf
+service squid restart
+
+#privoxy
+rm -rf /etc/privoxy/config
+cat <<'PRV' > /etc/privoxy/config
+user-manual /usr/share/doc/privoxy/user-manual
+confdir /etc/privoxy
+logdir /var/log/privoxy
+actionsfile match-all.action
+actionsfile default.action
+actionsfile user.action
+filterfile default.filter
+filterfile user.filter
+logfile logfile
+listen-address  :pr1
+listen-address  :pr2
+toggle 1
+enable-remote-toggle  0
+enable-remote-http-toggle  0
+enable-edit-actions 0
+enforce-blocks 0
+buffer-limit 4096
+enable-proxy-authentication-forwarding 0
+forwarded-connect-retries  1
+accept-intercepted-requests 1
+allow-cgi-request-crunching 0
+split-large-forms 0
+keep-alive-timeout 5
+tolerate-pipelining 1
+socket-timeout 300
+PRV
+
+sed -i "s|pr1|$priv_1|g" /etc/privoxy/config
+sed -i "s|pr2|$priv_2|g" /etc/privoxy/config
+service privoxy restart
+
+#tinyproxy
+rm -rf /etc/tinyproxy/tinyproxy.conf
+cat <<'TNY' > /etc/tinyproxy/tinyproxy.conf
+#NATH
+Userttinyproxy
+Group tinyproxy
+Port tn1
+Timeout 120
+DefaultErrorFile "/usr/share/tinyproxy/default.html"
+StatFile "/usr/share/tinyproxy/stats.html"
+LogFile "/var/log/tinyproxy/tinyproxy.log"
+LogLevel Info
+PidFile "/run/tinyproxy/tinyproxy.pid"
+XTinyproxy Yes
+MaxClients 50
+MinSpareServers 5
+MaxSpareServers 20
+StartServers 10
+MaxRequestsPerChild 0
+Allow 127.0.0.1
+Allow 192.168.0.0/16
+Allow 172.16.0.0/12
+Allow 10.0.0.0/8
+ViaProxyName "tinyproxy"
+ConnectPort 22
+ConnectPort 777
+ConnectPort 666
+ConnectPort 7575
+TNY
+
+sed -i "s|tn1|$tinyport|g" /etc/tinyproxy/tinyproxy.conf
+systemctl tinyproxy restart
+
+#install firewalld
+systemctl start firewalld
+systemctl enable firewalld
+firewall-cmd --quiet --set-default-zone=public
+firewall-cmd --quiet --zone=public --permanent --add-port=1-65534/tcp
+firewall-cmd --quiet --zone=public --permanent --add-port=1-65534/udp
+firewall-cmd --quiet --reload
+firewall-cmd --quiet --add-masquerade
+firewall-cmd --quiet --permanent --add-masquerade
+firewall-cmd --quiet --permanent --add-service=ssh
+firewall-cmd --quiet --permanent --add-service=socks
+firewall-cmd --quiet --permanent --add-service=http
+firewall-cmd --quiet --permanent --add-service=https
+firewall-cmd --quiet --permanent --add-service=privoxy
+firewall-cmd --quiet --permanent --add-service=squid
+firewall-cmd --quiet --permanent --add-service=tinyproxy
+firewall-cmd --quiet --permanent --add-service=httpv1
+firewall-cmd --quiet --reload
+
+#ipv4 forwarding
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+}
+
+function HTTP(){
+apt-get update
+
+#httpv1 setup
+sudo mkdir /usr/httpv1
+wget https://github.com/nokyaselpon/MyScript/raw/main/files/http.zip
+unzip http.zip
+chmod 755 httpv1
+sudo mv httpv1 /usr/httpv1/
+
+#httpv1 files
+wget https://github.com/nokyaselpon/MyScript/raw/main/files/hello.zip
+unzip hello.zip
+chmod 755 simple
+chmod 755 stop
+sudo mv simple /usr/httpv1/
+sudo mv stop /usr/httpv1/
+
+#Dameon httpv1
+cat <<EOF > /lib/systemd/system/httpv1.service
+
+[Unit]
+Description=HTTPv1 Server
+Wants=network.target
+After=network.target
+
+[Service]
+Type=Forking
+ExecStart=/bin/bash /usr/httpv1/simple 2>/dev/null
+ExecStop=/bin/bash /usr/httpv1/stop 2>/dev/null
+Restart=always
+RestartSec=1
+[Install]
+WantedBy=multi-user.target
+EOF
+
+#services
+sudo systemctl daemon-reload
+sudo systemctl start httpv1
+service restart httpv1
+sudo systemctl enable httpv1
+}
+
+function DDOSF2BAD(){
+#fail2ban
+apt-get -y install fail2ban;
+service fail2ban restart
+
+#ddos
+wget "https://github.com/nokyaselpon/MyScript/raw/main/ddos-deflate-master.zip"
+unzip ddos-deflate-master.zip
+cd ddos-deflate-master
+./install.sh
+cd
+rm -rf ddos-deflate-master.zip
+
+#badvpn
+wget -O /usr/bin/badvpn-udpgw "https://github.com/nokyaselpon/MyScript/raw/main/badvpn-udpgw"
+if [ "$OS" == "x86_64" ]; then
+wget -O /usr/bin/badvpn-udpgw "https://github.com/nokyaselpon/MyScript/raw/main/badvpn-udpgw64"
+fi
+sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
+chmod +x /usr/bin/badvpn-udpgw
+screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
+}
+
+#Allow all tcp
+iptables -A INPUT -s $(wget -4qO- http://ipinfo.io/ip) -p tcp -m multiport --dport 1:65535 -j ACCEPT
+iptables-save
+
+#servertime
+ln -fs /usr/share/zoneinfo/Asia/Manila /etc/localtime
+
+#xml
+apt-get -y --force-yes -f install libxml-parser-perl
+
+
+function START(){
+#startupscript
+# Creating directory for startup script
+rm -rf /etc/tata
+mkdir -p /etc/tata
+chmod -R 755 /etc/tata
+cat <<'SH' > /etc/tata/startup.sh
+#!/bin/bash
+export DEBIAN_FRONTEND=noninteractive
+#delete expired acc
+/usr/local/sbin/delete_expired &> /dev/null
+SH
+chmod +x /etc/tata/startup.sh
+rm -rf /etc/sysctl.d/99*
+#Setting our startup script to run every machine boots 
+echo "
+[Unit]
+Description=Tata Startup Script
+Before=network-online.target
+Wants=network-online.target
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /etc/tata/startup.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/tata.service
+chmod +x /etc/systemd/system/barts.service
+systemctl daemon-reload
+systemctl start ata
+systemctl enable tata &> /dev/null
+#restart cron
+systemctl restart cron
+systemctl enable cron
+}
+
+#menu
+function MENU(){
+echo -e " Creating Menu scripts.."
+cd /usr/local/sbin/
+rm -rf {accounts,base-ports,base-ports-wc,base-script,bench-network,clearcache,connections,create,create_random,create_trial,delete_expired,diagnose,edit_dropbear,edit_openssh,edit_openvpn,edit_ports,edit_squid3,edit_stunnel4,locked_list,menu,options,ram,reboot_sys,reboot_sys_auto,restart_services,server,set_multilogin_autokill,set_multilogin_autokill_lib,show_ports,speedtest,user_delete,user_details,user_details_lib,user_extend,user_list,user_lock,user_unlock}
+
+wget -q 'https://raw.githubusercontent.com/nokyaselpon/TATA/main/menu.zip'
+unzip -qq menu.zip
+rm -f menu.zip
+chmod +x ./*
+dos2unix ./* &> /dev/null
+cd ~
+echo 'clear' > /etc/profile.d/tata.sh
+echo 'echo '' > /var/log/syslog' >> /etc/profile.d/tata.sh
+
+echo 'screenfetch -p -A Android' >> /etc/profile.d/tata.sh
+chmod +x /etc/profile.d/tata.sh
+}
+
+function ScriptMessage(){
+ echo -e " (｡◕‿◕｡) $ScriptName Hello, Enjoy !"
+ echo -e " "
+ echo -e ""
+ echo -e " TATA VPS"
+}
+###############################################
+###############################################
+
+#begin installation
+apt-get update
+clear
+ScriptMessage
+sleep 3
+
+#webmin
+echo -e "Configuring webmin...."
+WEBMIN
+
+#ssh and dropbear
+echo -e "Configuring ssh and dropbear...."
+SSHDROP
+
+#proxies
+echo -e "Configuring proxies...."
+PROXY
+
+#httpv1 service
+echo -e "Configuring httpv1...."
+HTTP
+
+#ddosdeflate && fail2ban && badvpn
+echo -e "Configuring ddosdeflate and fail2ban...."
+DDOSF2BAD
+
+#start
+START
+
+#menu
+MENU
+
+clear
+cd ~
+#sysinfo
+bash /etc/profile.d/tata.sh
+
+Scriptmessage
+sleep 2
+
+ #Additional infos
+ echo -e ""
+ echo -e " Success Installation"
+ echo -e ""
+ echo -e " Your IP: $MYIP"
+ echo -e ""
+ echo -e " Service Ports: "
+ echo -e ""
+ echo -e " OpenSSH: $ssh_1, $ssh_2"
+ echo -e " DropbearSSH: $drop_1, $drop_2"
+ echo -e " Privoxy: $priv_1, $priv_2"
+ echo -e " Squid: $sqd_1, $sqd_2, $sqd_3"
+ echo -e ""
+ echo -e " HTTPv1 Ports:"
+ echo -e " TinytoHttpv1: 7575"
+ echo -e " SquidtoHttpv1: 7676"
+ echo -e " PrivoxytoHttpv1: 8996"
+ echo -e ""
+ echo -e " Type menu for list of commands"
+ echo -e ""
+ echo -e ""
+#Clear installation logs
+rm -rf /root/.bash_history && history -c && echo '' > /var/log/syslog
+exit 1
