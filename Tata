@@ -5,16 +5,16 @@ MYIP="$(wget -qO- -t1 -T2 ipinfo.io/ip)";
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 echo " "
 clear
-echo "                                    ############################################"
-echo "                                    ##                                        ##"
-echo "                                    ##                                        ##"
-echo "                                    ##         Installation Starting.....     ##"
-echo "                                    ##                                        ##"
-echo "                                    ##        Press Ctrl + c to cancel        ##"
-echo "                                    ##                                        ##"
-echo "                                    ##                  NATH                  ##"
-echo "                                    ##                                        ##"
-echo "                                    ############################################"
+echo "                                 ############################################"
+echo "                                 ##                                        ##"
+echo "                                 ##                                        ##"
+echo "                                 ##         Installation Starting.....     ##"
+echo "                                 ##                                        ##"
+echo "                                 ##        Press Ctrl + c to cancel        ##"
+echo "                                 ##                                        ##"
+echo "                                 ##                  NATH                  ##"
+echo "                                 ##                                        ##"
+echo "                                 ############################################"
 sleep 6
 
 # Root Directory
