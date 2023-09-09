@@ -1,6 +1,6 @@
 #!/bin/bash
-# Nath
-# Start
+#Nath
+#Start
 MYIP="$(wget -qO- -t1 -T2 ipinfo.io/ip)";
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 echo " "
