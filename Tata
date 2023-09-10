@@ -261,59 +261,6 @@ iptables -D FORWARD -m string --algo bm --string "tracker" -j DROP
 iptables-save
 cd
 
-# Install Tinyproxy
-apt-get -y install tinyproxy
-wget -O /etc/tinyproxy/tinyproxy.conf "https://raw.githubusercontent.com/nokyaselpon/MyScript/main/files/tinyproxy.conf"
-service restart tinyproxy
-clear
-sleep 1
-
-# Setup Privoxy
-apt-get install -y privoxy
-echo 'Setting up Privoxy'
-sleep 1
-clear
-
-#httpv1 setup
-sudo mkdir /usr/httpv1
-wget https://github.com/nokyaselpon/MyScript/raw/main/files/http.zip
-unzip http.zip
-chmod 755 httpv1
-sudo mv httpv1 /usr/httpv1/
-
-#httpv1 files
-wget https://github.com/nokyaselpon/MyScript/raw/main/files/hello.zip
-unzip hello.zip
-chmod 755 simple
-chmod 755 stop
-sudo mv simple /usr/httpv1/
-sudo mv stop /usr/httpv1/
-
-#Dameon httpv1
-cat <<EOF > /lib/systemd/system/httpv1.service
-[Unit]
-Description=HTTPv1 Server
-Wants=network.target
-After=network.target
-
-[Service]
-Type=Forking
-ExecStart=/bin/bash /usr/httpv1/simple 2>/dev/null
-ExecStop=/bin/bash /usr/httpv1/stop 2>/dev/null
-Restart=always
-RestartSec=1
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-#services
-sudo systemctl daemon-reload
-sudo systemctl start httpv1
-service restart httpv1
-sudo systemctl enable httpv1
-sleep 1
-
 # Install Fail2Ban
 apt-get -y install fail2ban;
 service fail2ban restart
