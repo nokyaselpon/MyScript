@@ -1,0 +1,31 @@
+apt update
+apt upgrade -y
+
+sudo ufw allow 8088/tcp
+
+apt install -y software-properties-common
+add-apt-repository ppa:openjdk-r/ppa
+apt update
+
+apt install openjdk-8-jre-headless -y
+
+update-alternatives --config java
+
+apt install wget unzip -y
+
+wget https://static.tp-link.com/upload/software/2024/202411/20241101/Omada_SDN_Controller_v5.14.32.3_linux_x64.deb
+
+dpkg -i Omada_SDN_Controller_v5.14.32.3_linux_x64.deb
+
+apt install -f
+
+systemctl start omada
+
+systemctl enable omada
+
+http://your_droplet_ip:8088
+
+
+
+
+
