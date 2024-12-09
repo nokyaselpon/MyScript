@@ -13,6 +13,10 @@ update-alternatives --config java
 
 apt install wget unzip -y
 
+sudo apt update
+sudo apt install libcommons-daemon-java -y
+
+
 wget https://static.tp-link.com/upload/software/2024/202411/20241101/Omada_SDN_Controller_v5.14.32.3_linux_x64.deb
 
 dpkg -i Omada_SDN_Controller_v5.14.32.3_linux_x64.deb
