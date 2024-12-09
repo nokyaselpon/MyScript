@@ -1,41 +1,46 @@
 START
 
+# update and upgrade
+
 apt update
 apt upgrade -y
 
+#set firewall rules
+
 sudo ufw allow 8088
+
 sudo ufw allow 8043
+
 sudo ufw allow 29810:29814/tcp
+
 sudo ufw reload
 
-apt install -y software-properties-common
-add-apt-repository ppa:openjdk-r/ppa
-apt update
+#install needed files
+
+apt install mongodb -y
+
+apt install jsvc -y
 
 apt install openjdk-8-jre-headless -y
 
 update-alternatives --config java
 
-apt install wget unzip -y
+apt install libcommons-daemon-java -y
 
-sudo apt update
-sudo apt install libcommons-daemon-java -y
+apt install gdebi-core
 
+#install omada
 
 wget https://static.tp-link.com/upload/software/2024/202411/20241101/Omada_SDN_Controller_v5.14.32.3_linux_x64.deb
 
 dpkg -i Omada_SDN_Controller_v5.14.32.3_linux_x64.deb
 
-apt install -f
-
-systemctl start omada
-
-systemctl enable omada
-
-http://your_droplet_ip:8088
-
+#set this into your device web admin
 
 inform wan ip via system
+
+
+
 
 
 
