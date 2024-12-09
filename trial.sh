@@ -17,19 +17,32 @@ net.ipv6.conf.default.disable_ipv6 = 1
 EOF
 sysctl -p
 
-# 2. Install SSH (if not installed)
-echo "Installing SSH..."
+# 2. Install SSH
+echo "Ensuring OpenSSH is installed and enabled..."
 apt update
 apt install -y openssh-server
+systemctl enable ssh
+systemctl restart ssh
 
 # 3. Install Dropbear
 echo "Installing Dropbear..."
 apt install -y dropbear
 sed -i 's/NO_START=1/NO_START=0/' /etc/default/dropbear
 sed -i "s/DROPBEAR_PORT=22/DROPBEAR_PORT=443\nDROPBEAR_EXTRA_ARGS=\"-p 445\"/" /etc/default/dropbear
+systemctl enable dropbear
 systemctl restart dropbear
 
-# 4. Install and Configure OpenVPN
+# 4. Configure UFW (Firewall)
+echo "Configuring UFW firewall rules..."
+ufw allow 22/tcp       # OpenSSH
+ufw allow 443/tcp      # Dropbear
+ufw allow 445/tcp      # Dropbear
+ufw allow $WEB_PORT/tcp # Web server for client.ovpn
+ufw allow $SQUID_PORT1/tcp
+ufw allow $SQUID_PORT2/tcp
+ufw enable
+
+# 5. Install and Configure OpenVPN
 echo "Installing OpenVPN..."
 apt install -y openvpn easy-rsa
 make-cadir /etc/openvpn/easy-rsa
@@ -106,19 +119,19 @@ http-proxy-option CUSTOM-HEADER Referrer googleapis.google-analytics.com
 http-proxy-retry
 EOF
 
-# 5. Install Squid
+# 6. Install Squid
 echo "Installing Squid..."
 apt install -y squid
 sed -i "/http_port/c\http_port $SQUID_PORT1\nhttp_port $SQUID_PORT2" /etc/squid/squid.conf
 systemctl restart squid
 
-# 6. Set up Web Server
+# 7. Set up Web Server
 echo "Setting up web server for client.ovpn download..."
 apt install -y apache2
-ufw allow $WEB_PORT
+ufw allow $WEB_PORT/tcp
 echo "Client.ovpn available at: http://$IP_ADDRESS:$WEB_PORT/client.ovpn"
 
-# 7. User Management Menu
+# 8. User Management Menu
 echo "Setting up user management script..."
 cat <<'EOF' > /usr/local/bin/manage-users
 #!/bin/bash
@@ -149,16 +162,6 @@ while true; do
 done
 EOF
 chmod +x /usr/local/bin/manage-users
-
-# 8. Configure iptables and firewall
-echo "Configuring iptables and firewall..."
-ufw allow $SQUID_PORT1
-ufw allow $SQUID_PORT2
-ufw allow $WEB_PORT
-ufw allow $OPENVPN_PORT_TCP
-ufw allow 443
-ufw allow 445
-ufw enable
 
 # 9. Set up cron job for nightly restart
 echo "Setting up cron job for nightly restart..."
