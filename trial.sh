@@ -6,60 +6,92 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-# Update system
-echo "Updating system packages..."
-apt update && apt upgrade -y
+# Ask for command to run
+echo "Enter 'create' to create a user or 'install' to install everything."
+read command
 
-# Install necessary packages
-echo "Installing required packages..."
-apt install -y dropbear openvpn wget ufw iptables
+# User creation if 'create' is entered
+if [ "$command" == "create" ]; then
+    # Prompt for username, password, and expiration date
+    echo "Enter the username for the new user:"
+    read username
+    echo "Enter the password for the new user:"
+    read -s password
+    echo "Enter the expiration date for the user (format: YYYY-MM-DD):"
+    read expiration_date
 
-# Configure Dropbear to run on multiple ports (22, 443, and 445)
-echo "Configuring Dropbear SSH server on ports 22, 443, and 445..."
-echo "DROPBEAR_PORTS=\"22 443 445\"" > /etc/default/dropbear
+    # Create the user
+    useradd -m "$username"
 
-# Configure Dropbear to allow root login and disable password authentication
-echo "Configuring Dropbear settings..."
-echo "DROPBEAR_BANNER=\"/etc/banner\"" >> /etc/default/dropbear
-echo "DROPBEAR_EXTRA_ARGS=\"-w -s\"" >> /etc/default/dropbear
+    # Set the password for the user
+    echo "$username:$password" | chpasswd
 
-# Create SSH banner (optional)
-echo "Creating SSH banner..."
-echo "Welcome to your VPS!" > /etc/banner
+    # Set the expiration date for the user
+    usermod -e "$expiration_date" "$username"
 
-# Restart Dropbear to apply changes
-echo "Restarting Dropbear service..."
-systemctl restart dropbear
-systemctl enable dropbear
+    # Provide feedback
+    echo "User '$username' has been created with an expiration date of $expiration_date."
 
-# Install and configure OpenVPN server
-echo "Installing OpenVPN server..."
-apt install -y openvpn easy-rsa
+    # Exit script after creating the user
+    exit 0
+fi
 
-# Set up the OpenVPN server directory
-make-cadir ~/openvpn-ca
-cd ~/openvpn-ca
+# Proceed with installation if the 'install' command is entered
+if [ "$command" == "install" ]; then
+    # Update system
+    echo "Updating system packages..."
+    apt update && apt upgrade -y
 
-# Initialize the PKI (Public Key Infrastructure)
-echo "Initializing PKI for OpenVPN..."
-source vars
-./clean-all
-./build-ca
+    # Install necessary packages
+    echo "Installing required packages..."
+    apt install -y dropbear openvpn wget ufw iptables
 
-# Create server certificate and key
-./build-key-server server
+    # Configure Dropbear to run on multiple ports (22, 443, and 445)
+    echo "Configuring Dropbear SSH server on ports 22, 443, and 445..."
+    echo "DROPBEAR_PORTS=\"22 443 445\"" > /etc/default/dropbear
 
-# Generate Diffie-Hellman parameters
-./build-dh
+    # Configure Dropbear to allow root login and disable password authentication
+    echo "Configuring Dropbear settings..."
+    echo "DROPBEAR_BANNER=\"/etc/banner\"" >> /etc/default/dropbear
+    echo "DROPBEAR_EXTRA_ARGS=\"-w -s\"" >> /etc/default/dropbear
 
-# Generate an HMAC signature for added security
-openvpn --genkey --secret keys/ta.key
+    # Create SSH banner (optional)
+    echo "Creating SSH banner..."
+    echo "Welcome to your VPS!" > /etc/banner
 
-# Copy the certificates and keys to the OpenVPN server config directory
-cp keys/{server.crt,server.key,ca.crt,ta.key,dh2048.pem} /etc/openvpn
+    # Restart Dropbear to apply changes
+    echo "Restarting Dropbear service..."
+    systemctl restart dropbear
+    systemctl enable dropbear
 
-# Create OpenVPN server config file
-cat > /etc/openvpn/server.conf <<EOF
+    # Install and configure OpenVPN server
+    echo "Installing OpenVPN server..."
+    apt install -y openvpn easy-rsa
+
+    # Set up the OpenVPN server directory
+    make-cadir ~/openvpn-ca
+    cd ~/openvpn-ca
+
+    # Initialize the PKI (Public Key Infrastructure)
+    echo "Initializing PKI for OpenVPN..."
+    source vars
+    ./clean-all
+    ./build-ca
+
+    # Create server certificate and key
+    ./build-key-server server
+
+    # Generate Diffie-Hellman parameters
+    ./build-dh
+
+    # Generate an HMAC signature for added security
+    openvpn --genkey --secret keys/ta.key
+
+    # Copy the certificates and keys to the OpenVPN server config directory
+    cp keys/{server.crt,server.key,ca.crt,ta.key,dh2048.pem} /etc/openvpn
+
+    # Create OpenVPN server config file
+    cat > /etc/openvpn/server.conf <<EOF
 port 1194
 proto udp
 dev tun
@@ -85,40 +117,40 @@ log /var/log/openvpn/openvpn.log
 verb 3
 EOF
 
-# Enable IP forwarding in sysctl
-echo "Enabling IP forwarding..."
-sysctl -w net.ipv4.ip_forward=1
+    # Enable IP forwarding in sysctl
+    echo "Enabling IP forwarding..."
+    sysctl -w net.ipv4.ip_forward=1
 
-# Make the change permanent
-echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
-sysctl -p
+    # Make the change permanent
+    echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+    sysctl -p
 
-# Set up NAT in iptables to allow VPN clients to access the internet
-echo "Configuring iptables for NAT..."
-iptables --table nat -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
-iptables-save > /etc/iptables/rules.v4
+    # Set up NAT in iptables to allow VPN clients to access the internet
+    echo "Configuring iptables for NAT..."
+    iptables --table nat -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
+    iptables-save > /etc/iptables/rules.v4
 
-# Enable and start OpenVPN service
-echo "Starting OpenVPN service..."
-systemctl start openvpn@server
-systemctl enable openvpn@server
+    # Enable and start OpenVPN service
+    echo "Starting OpenVPN service..."
+    systemctl start openvpn@server
+    systemctl enable openvpn@server
 
-# Install UFW and configure firewall
-echo "Configuring UFW firewall..."
-ufw allow 22/tcp
-ufw allow 443/tcp
-ufw allow 445/tcp
-ufw allow 1194/udp  # OpenVPN default port
-ufw enable
+    # Install UFW and configure firewall
+    echo "Configuring UFW firewall..."
+    ufw allow 22/tcp
+    ufw allow 443/tcp
+    ufw allow 445/tcp
+    ufw allow 1194/udp  # OpenVPN default port
+    ufw enable
 
-# Generate a client certificate for the OpenVPN client (client.ovpn)
-cd ~/openvpn-ca
-source vars
-./build-key client
+    # Generate a client certificate for the OpenVPN client (client.ovpn)
+    cd ~/openvpn-ca
+    source vars
+    ./build-key client
 
-# Create the client configuration file (client.ovpn)
-echo "Creating OpenVPN client configuration (client.ovpn)..."
-cat > ~/client.ovpn <<EOF
+    # Create the client configuration file (client.ovpn)
+    echo "Creating OpenVPN client configuration (client.ovpn)..."
+    cat > ~/client.ovpn <<EOF
 client
 dev tun
 proto udp
@@ -136,10 +168,15 @@ comp-lzo
 verb 3
 EOF
 
-# Move the client configuration to the appropriate folder
-cp ~/openvpn-ca/keys/{ca.crt,client.crt,client.key,ta.key} ~/
-scp ~/client.ovpn user@client_machine:/path/to/save/client.ovpn
+    # Move the client configuration to the appropriate folder
+    cp ~/openvpn-ca/keys/{ca.crt,client.crt,client.key,ta.key} ~/
+    scp ~/client.ovpn user@client_machine:/path/to/save/client.ovpn
 
-# Done
-echo "OpenVPN server is fully configured and running!"
-echo "OpenVPN client configuration file (client.ovpn) has been created and copied to the client machine."
+    # Done
+    echo "OpenVPN server is fully configured and running!"
+    echo "OpenVPN client configuration file (client.ovpn) has been created and copied to the client machine."
+
+else
+    echo "Invalid command. Please type 'create' to create a user or 'install' to install everything."
+    exit 1
+fi
