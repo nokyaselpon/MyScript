@@ -1,91 +1,92 @@
 #!/bin/bash
 
-# Variables
-IP_ADDRESS=$(curl -s http://ifconfig.me)
-OVPN_FILE="/var/www/html/client.ovpn"
-OPENVPN_PORT_TCP=210
-SQUID_PORT1=8080
-SQUID_PORT2=8000
-WEB_PORT=81
-TIMEZONE="Asia/Manila"
-
-# 1. Disable IPv6
+# Disable IPv6
 echo "Disabling IPv6..."
-cat <<EOF >> /etc/sysctl.conf
-net.ipv6.conf.all.disable_ipv6 = 1
-net.ipv6.conf.default.disable_ipv6 = 1
-EOF
-sysctl -p
+sysctl -w net.ipv6.conf.all.disable_ipv6=1
+sysctl -w net.ipv6.conf.default.disable_ipv6=1
+sysctl -w net.ipv6.conf.lo.disable_ipv6=1
+echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
+echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
+echo "net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf
 
-# 2. Install SSH
-echo "Ensuring OpenSSH is installed and enabled..."
-apt update
-apt install -y openssh-server
-systemctl enable ssh
-systemctl restart ssh
+# Change timezone to Manila (PH)
+echo "Setting timezone to Manila (PH)..."
+timedatectl set-timezone Asia/Manila
 
-# 3. Install Dropbear
-echo "Installing Dropbear..."
-apt install -y dropbear
-sed -i 's/NO_START=1/NO_START=0/' /etc/default/dropbear
-sed -i "s/DROPBEAR_PORT=22/DROPBEAR_PORT=443\nDROPBEAR_EXTRA_ARGS=\"-p 445\"/" /etc/default/dropbear
-systemctl enable dropbear
-systemctl restart dropbear
+# Install required packages
+echo "Installing required packages..."
+apt update && apt upgrade -y
+apt install -y wget curl nano iptables dnsutils screen whois ngrep unzip apache2 openvpn easy-rsa ufw squid3 stunnel
 
-# 4. Configure UFW (Firewall)
-echo "Configuring UFW firewall rules..."
-ufw allow 22/tcp       # OpenSSH
-ufw allow 443/tcp      # Dropbear
-ufw allow 445/tcp      # Dropbear
-ufw allow $WEB_PORT/tcp # Web server for client.ovpn
-ufw allow $SQUID_PORT1/tcp
-ufw allow $SQUID_PORT2/tcp
-ufw enable
+# Set Apache2 to listen on port 81 (to serve .ovpn)
+echo "Configuring Apache to serve client.ovpn on port 81..."
+sed -i 's/80/81/' /etc/apache2/ports.conf
+echo "<IfModule mod_ssl.c>" >> /etc/apache2/sites-available/000-default.conf
+echo "   Listen 81" >> /etc/apache2/sites-available/000-default.conf
+echo "</IfModule>" >> /etc/apache2/sites-available/000-default.conf
+systemctl restart apache2
 
-# 5. Install and Configure OpenVPN
-echo "Installing OpenVPN..."
-apt install -y openvpn easy-rsa
-make-cadir /etc/openvpn/easy-rsa
-cd /etc/openvpn/easy-rsa
-./easyrsa init-pki
-./easyrsa build-ca nopass
-./easyrsa gen-req server nopass
-./easyrsa sign-req server server
-./easyrsa gen-dh
-openvpn --genkey --secret ta.key
+# Set OpenVPN and modify vars
+echo "Configuring OpenVPN variables..."
+sed -i 's|export KEY_COUNTRY="US"|export KEY_COUNTRY="PH"|g' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_PROVINCE="CA"|export KEY_PROVINCE="Manila"|g' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_CITY="SanFrancisco"|export KEY_CITY="Manila"|g' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_ORG="Nath"|export KEY_ORG="mood"|g' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_EMAIL="me@myhost.mydomain"|export KEY_EMAIL="nokyaselpon@gmail.com"|g' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_OU="MyPrivateServer"|export KEY_OU="mood"|g' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_NAME="EasyRSA"|export KEY_NAME="mood"|g' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_OU=changeme|export KEY_OU=mood|g' /etc/openvpn/easy-rsa/vars
 
-cp pki/ca.crt pki/issued/server.crt pki/private/server.key ta.key /etc/openvpn/
+# Install and configure OpenVPN server (TCP protocol on port 210)
+echo "Installing and configuring OpenVPN server..."
+cd /etc/openvpn/
+mkdir -p /etc/openvpn/easy-rsa/
+cp -r /usr/share/easy-rsa/* /etc/openvpn/easy-rsa/
+chmod 755 /etc/openvpn/easy-rsa/
+cd /etc/openvpn/easy-rsa/
+
+# Generate OpenVPN server and client certificates/keys (replace with your own)
+# Make sure to follow the instructions for EasyRSA to generate certs and keys before proceeding.
+
+# Create OpenVPN server.conf
 cat <<EOF > /etc/openvpn/server.conf
-port $OPENVPN_PORT_TCP
+port 210
 proto tcp
 dev tun
 ca ca.crt
 cert server.crt
 key server.key
-dh dh.pem
-auth SHA256
-tls-auth ta.key 0
-cipher AES-128-CBC
-persist-key
-persist-tun
+dh dh2048.pem
+client-cert-not-required
+username-as-common-name
+plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so login
+server 192.168.100.0 255.255.255.0
+ifconfig-pool-persist ipp.txt
+push "redirect-gateway def1 bypass-dhcp"
+push "dhcp-option DNS 1.1.1.1"
+push "dhcp-option DNS 1.0.0.1"
+push "route-method exe"
+push "route-delay 2"
+duplicate-cn
+keepalive 10 120
+comp-lzo
 user nobody
 group nogroup
+persist-key
+persist-tun
+status openvpn-status.log
+log         openvpn.log
 verb 3
-keepalive 10 120
-push "redirect-gateway def1 bypass-dhcp"
-push "dhcp-option DNS 8.8.8.8"
+cipher AES-128-CBC
 EOF
 
-systemctl enable openvpn@server
-systemctl start openvpn@server
-
-# Create OpenVPN client configuration file
-echo "Creating OpenVPN client configuration file..."
-cat <<EOF > $OVPN_FILE
+# Configure OpenVPN client.ovpn
+echo "Creating client.ovpn..."
+cat <<EOF > /etc/openvpn/client.ovpn
 client
 dev tun
 proto tcp
-remote $IP_ADDRESS $OPENVPN_PORT_TCP
+remote $MYIP 210
 persist-key
 persist-tun
 pull
@@ -109,7 +110,7 @@ route 0.0.0.0 0.0.0.0
 route-method exe
 route-delay 2
 cipher AES-128-CBC
-http-proxy $IP_ADDRESS 8000
+http-proxy xxxxxxxxx 8000
 http-proxy-option VERSION 1.1
 http-proxy-option AGENT Chrome/80.0.3987.87
 http-proxy-option CUSTOM-HEADER Host googleapis.google-analytics.com
@@ -119,53 +120,57 @@ http-proxy-option CUSTOM-HEADER Referrer googleapis.google-analytics.com
 http-proxy-retry
 EOF
 
-# 6. Install Squid
-echo "Installing Squid..."
-apt install -y squid
-sed -i "/http_port/c\http_port $SQUID_PORT1\nhttp_port $SQUID_PORT2" /etc/squid/squid.conf
+# Replace $MYIP in client.ovpn with actual VPS IP
+sed -i 's/$MYIP/'$(hostname -I | awk '{print $1}')'/g' /etc/openvpn/client.ovpn
+
+# Move the client.ovpn file to the Apache server's document root
+echo "Making client.ovpn file accessible via web..."
+mkdir -p /var/www/html/openvpn
+cp /etc/openvpn/client.ovpn /var/www/html/openvpn/
+chmod 644 /var/www/html/openvpn/client.ovpn
+chown www-data:www-data /var/www/html/openvpn/client.ovpn
+
+# Enable firewall and allow necessary ports
+echo "Configuring firewall..."
+ufw allow 22/tcp
+ufw allow 210/tcp
+ufw allow 81/tcp
+ufw allow 443/tcp
+ufw allow 8000/tcp
+ufw enable
+
+# Enable IP forwarding
+echo "Enabling IP forwarding..."
+echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
+sed -i 's|#net.ipv4.ip_forward=1|net.ipv4.ip_forward=1|' /etc/sysctl.conf
+sysctl -p
+
+# Configure Squid proxy on ports 8080 and 8000
+echo "Installing and configuring Squid proxy..."
+cat <<EOF > /etc/squid/squid.conf
+http_port 8080
+http_port 8000
+acl all src all
+http_access allow all
+EOF
 systemctl restart squid
 
-# 7. Set up Web Server
-echo "Setting up web server for client.ovpn download..."
-apt install -y apache2
-ufw allow $WEB_PORT/tcp
-echo "Client.ovpn available at: http://$IP_ADDRESS:$WEB_PORT/client.ovpn"
-
-# 8. User Management Menu
-echo "Setting up user management script..."
-cat <<'EOF' > /usr/local/bin/manage-users
-#!/bin/bash
-add_user() {
-  read -p "Enter username: " username
-  read -p "Enter password: " password
-  read -p "Enter expiration (days): " days
-  useradd -e $(date -d "+$days days" +%Y-%m-%d) -M -s /bin/false $username
-  echo "$username:$password" | chpasswd
-  echo "User $username added with expiration of $days days."
-}
-del_user() {
-  read -p "Enter username: " username
-  userdel -r $username
-  echo "User $username deleted."
-}
-while true; do
-  echo "1. Add User"
-  echo "2. Delete User"
-  echo "3. Exit"
-  read -p "Choose an option: " choice
-  case $choice in
-    1) add_user ;;
-    2) del_user ;;
-    3) exit ;;
-    *) echo "Invalid option." ;;
-  esac
-done
+# Install and configure Stunnel
+echo "Installing and configuring Stunnel..."
+cat <<EOF > /etc/stunnel/stunnel.conf
+cert = /etc/stunnel/stunnel.pem
+key = /etc/stunnel/stunnel.key
+[openvpn]
+accept = 443
+connect = 127.0.0.1:210
 EOF
-chmod +x /usr/local/bin/manage-users
+systemctl enable stunnel
+systemctl start stunnel
 
-# 9. Set up cron job for nightly restart
-echo "Setting up cron job for nightly restart..."
-echo "0 16 * * * /sbin/reboot" | crontab -
+# Restart Apache2 to reflect changes
+systemctl restart apache2
 
-echo "Setup complete. Rebooting now..."
-reboot
+# Final instructions
+echo "OpenVPN and web server setup completed."
+echo "You can download your client.ovpn configuration from: http://$(hostname -I | awk '{print $1}'):81/openvpn/client.ovpn"
