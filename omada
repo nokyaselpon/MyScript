@@ -1,8 +1,11 @@
 apt update
 apt upgrade -y
 
-sudo ufw allow 8088/tcp
-sudo ufw allow 8043/tcp
+sudo ufw allow 8088
+sudo ufw allow 8043
+sudo ufw allow 29810:29814/tcp
+sudo ufw reload
+
 
 apt install -y software-properties-common
 add-apt-repository ppa:openjdk-r/ppa
