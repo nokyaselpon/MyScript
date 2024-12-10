@@ -13,22 +13,22 @@ apt upgrade -y
 
 timedatectl list-timezones | grep Manila
 
-sudo timedatectl set-timezone Asia/Manila
+timedatectl set-timezone Asia/Manila
 
 timedatectl
 
-sudo timedatectl set-ntp true
+timedatectl set-ntp true
 
 
 #set firewall rules
 
-sudo ufw allow 8088
+ufw allow 8088
 
-sudo ufw allow 8043
+ufw allow 8043
 
-sudo ufw allow 29810:29814/tcp
+ufw allow 29810:29814/tcp
 
-sudo ufw reload
+ufw reload
 
 #install needed files
 
@@ -38,7 +38,7 @@ apt install jsvc -y
 
 apt install openjdk-8-jre-headless -y
 
-update-alternatives --config java
+echo "2" | update-alternatives --config java
 
 apt install libcommons-daemon-java -y
 
@@ -61,7 +61,7 @@ nano /etc/rc.local
 (sleep 180; /usr/bin/tpeap stop) &
 (sleep 360; /usr/bin/tpeap start) &
 
-sudo chmod +x /etc/rc.local
+chmod +x /etc/rc.local
 
 
 
