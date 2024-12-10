@@ -1,62 +1,62 @@
 #!/bin/bash
 
-set -e  # Exit immediately if a command exits with a non-zero status
+# update and upgrade
 
-echo "Starting Omada Controller Setup..."
+apt update
+apt upgrade -y
 
-# Update and upgrade system
-echo "Updating and upgrading the system..."
-apt update && apt upgrade -y
+#set timezone
 
-# Set timezone
-echo "Setting timezone to Asia/Manila..."
+timedatectl list-timezones | grep Manila
+
 timedatectl set-timezone Asia/Manila
+
+timedatectl
+
 timedatectl set-ntp true
 
-# Configure firewall
-echo "Configuring firewall rules..."
-sudo ufw enable
-sudo ufw allow 8088
-sudo ufw allow 8043
-sudo ufw allow 29810:29814/tcp
-sudo ufw reload
 
-# Install required dependencies
-echo "Installing required packages..."
-apt install -y mongodb jsvc openjdk-8-jre-headless libcommons-daemon-java gdebi-core
+#set firewall rules
 
-# Download and install Omada Controller
-OMADA_URL="https://static.tp-link.com/upload/software/2024/202411/20241101/Omada_SDN_Controller_v5.14.32.3_linux_x64.deb"
-echo "Downloading Omada Controller..."
-wget --spider $OMADA_URL || { echo "Invalid Omada URL. Exiting."; exit 1; }
-wget $OMADA_URL
-dpkg -i Omada_SDN_Controller_v5.14.32.3_linux_x64.deb
+ufw enable
 
-# Wait for Omada Controller to start
-SERVICE_NAME="tpeap"  # Update this if the service name differs
-echo "Waiting for Omada Controller to start..."
-while ! systemctl is-active --quiet $SERVICE_NAME; do
-    echo "Omada Controller not started yet. Retrying in 10 seconds..."
-    sleep 10
-done
-echo "Omada Controller is running!"
+ufw allow 8088
 
-# Set cron job to reboot the VPS every midnight PH time
-echo "Setting up cron job..."
-crontab -l > mycron 2>/dev/null || true
-echo "0 16 * * * /sbin/reboot" >> mycron
-crontab mycron
-rm mycron
+ufw allow 8043
 
-# Configure /etc/rc.local for delayed commands after reboot
-echo "Configuring rc.local..."
-sudo bash -c 'cat > /etc/rc.local <<EOL
-#!/bin/bash
+ufw allow 29810:29814/tcp
+
+ufw reload
+
+#install needed files
+
+apt install mongodb -y
+
+apt install jsvc -y
+
+apt install openjdk-8-jre-headless -y
+
+echo "2" | update-alternatives --config java
+
+apt install gdebi-core
+
+#install omada
+
+wget https://static.tp-link.com/upload/software/2023/202309/20230920/Omada_SDN_Controller_v5.12.7_Linux_x64.deb
+
+dpkg -i Omada_SDN_Controller_v5.12.7_Linux_x64.deb
+
+#set cron to reboot the vps every 12 midnight and automatically start the server
+
+echo "1" | crontab -e
+
+0 16 * * * /sbin/reboot
+
+nano /etc/rc.local
+
 (sleep 180; /usr/bin/tpeap stop) &
 (sleep 360; /usr/bin/tpeap start) &
-exit 0
-EOL'
-sudo chmod +x /etc/rc.local
-sudo systemctl enable rc-local
+
+chmod +x /etc/rc.local
 
 echo "Setup completed successfully!"
