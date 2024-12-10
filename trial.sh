@@ -42,9 +42,9 @@ apt install gdebi-core
 
 #install omada
 
-wget https://static.tp-link.com/upload/software/2023/202309/20230920/Omada_SDN_Controller_v5.12.7_Linux_x64.deb
+wget https://static.tp-link.com/upload/software/2024/202411/20241101/Omada_SDN_Controller_v5.14.32.3_linux_x64.deb
 
-dpkg -i Omada_SDN_Controller_v5.12.7_Linux_x64.deb
+dpkg -i Omada_SDN_Controller_v5.14.32.3_linux_x64.deb
 
 #set cron to reboot the vps every 12 midnight and automatically start the server
 
