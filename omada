@@ -42,8 +42,6 @@ apt install openjdk-8-jre-headless -y
 
 echo "2" | update-alternatives --config java
 
-apt install libcommons-daemon-java -y
-
 apt install gdebi-core
 
 #install omada
