@@ -1,9 +1,24 @@
 START
 
+#set this into your device web admin
+
+inform wan ip via system
+
 # update and upgrade
 
 apt update
 apt upgrade -y
+
+#set timezone
+
+timedatectl list-timezones | grep Manila
+
+sudo timedatectl set-timezone Asia/Manila
+
+timedatectl
+
+sudo timedatectl set-ntp true
+
 
 #set firewall rules
 
@@ -35,9 +50,20 @@ wget https://static.tp-link.com/upload/software/2024/202411/20241101/Omada_SDN_C
 
 dpkg -i Omada_SDN_Controller_v5.14.32.3_linux_x64.deb
 
-#set this into your device web admin
+#set cron to reboot the vps every 12 midnight and automatically start the server
 
-inform wan ip via system
+crontab -e
+
+0 16 * * * /sbin/reboot
+
+nano /etc/rc.local
+
+(sleep 180; /usr/bin/tpeap stop) &
+(sleep 360; /usr/bin/tpeap start) &
+
+sudo chmod +x /etc/rc.local
+
+
 
 
 
