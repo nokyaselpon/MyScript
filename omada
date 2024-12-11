@@ -11,26 +11,10 @@ apt upgrade -y
 
 #set timezone
 
-timedatectl list-timezones | grep Manila
-
 timedatectl set-timezone Asia/Manila
 
 timedatectl
 
-timedatectl set-ntp true
-
-
-#set firewall rules
-
-ufw enable
-
-ufw allow 8088
-
-ufw allow 8043
-
-ufw allow 29810:29814/tcp
-
-ufw reload
 
 #install needed files
 
